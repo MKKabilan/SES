@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Admin - Events</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -31,372 +39,825 @@
       display: none !important;
     }
 
-    /* LOGIN */
+
+    /* =========================
+       LOGIN
+    ========================= */
 
     #loginPage {
+
       min-height: 100vh;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       padding: 20px;
+
     }
+
 
     .login-box {
+
       width: 100%;
+
       max-width: 400px;
+
       background: white;
+
       padding: 35px;
+
       border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+      box-shadow:
+        0 8px 30px rgba(0,0,0,0.08);
+
     }
+
 
     .login-box h1 {
+
       text-align: center;
+
       margin-bottom: 8px;
+
     }
+
 
     .login-box p {
+
       text-align: center;
+
       color: #6b7280;
+
       margin-bottom: 25px;
+
     }
+
 
     .form-group {
+
       margin-bottom: 16px;
+
     }
 
+
     .form-group label {
+
       display: block;
+
       margin-bottom: 7px;
+
       font-size: 14px;
+
       font-weight: 600;
+
     }
+
 
     .form-group input,
     .form-group textarea {
+
       width: 100%;
+
       padding: 11px;
+
       border: 1px solid #d1d5db;
+
       border-radius: 8px;
+
       outline: none;
+
     }
 
+
     .form-group textarea {
+
       min-height: 120px;
+
       resize: vertical;
+
     }
+
 
     .form-group input:focus,
     .form-group textarea:focus {
+
       border-color: #2563eb;
+
     }
+
 
     .primary-btn {
+
       width: 100%;
+
       border: none;
+
       padding: 12px;
+
       border-radius: 8px;
+
       background: #2563eb;
+
       color: white;
+
       cursor: pointer;
+
       font-weight: 600;
+
     }
+
 
     .primary-btn:hover {
+
       background: #1d4ed8;
+
     }
+
 
     #loginMessage {
+
       margin-top: 15px;
+
       text-align: center;
+
       font-size: 14px;
+
       color: #dc2626;
+
     }
 
-    /* HEADER */
+
+    /* =========================
+       HEADER
+    ========================= */
 
     header {
+
       background: white;
+
       border-bottom: 1px solid #e5e7eb;
+
       position: sticky;
+
       top: 0;
+
       z-index: 20;
+
     }
 
+
     .header-inner {
+
       max-width: 1200px;
+
       margin: auto;
+
       padding: 15px 20px;
 
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
+
       gap: 15px;
+
     }
+
 
     .brand {
+
       font-size: 21px;
+
       font-weight: 700;
+
     }
+
 
     .brand span {
+
       color: #2563eb;
+
     }
+
 
     .header-actions {
+
       display: flex;
+
       gap: 10px;
+
     }
+
 
     .view-btn {
+
       border: 1px solid #d1d5db;
+
       background: white;
+
       color: #374151;
+
       padding: 9px 14px;
+
       border-radius: 7px;
+
       cursor: pointer;
+
     }
+
 
     .logout-btn {
+
       border: none;
+
       background: #ef4444;
+
       color: white;
+
       padding: 9px 15px;
+
       border-radius: 7px;
+
       cursor: pointer;
+
     }
 
-    /* MAIN */
+
+    /* =========================
+       MAIN
+    ========================= */
 
     main {
+
       max-width: 1200px;
+
       margin: auto;
+
       padding: 30px 20px 50px;
+
     }
+
 
     .page-title {
+
       margin-bottom: 25px;
+
     }
+
 
     .page-title h2 {
+
       font-size: 28px;
+
       margin-bottom: 5px;
+
     }
+
 
     .page-title p {
+
       color: #6b7280;
+
     }
 
-    /* DASHBOARD */
+
+    /* =========================
+       DASHBOARD
+    ========================= */
 
     .dashboard-grid {
+
       display: grid;
+
       grid-template-columns: 380px 1fr;
+
       gap: 25px;
+
       align-items: start;
+
     }
+
 
     .panel {
+
       background: white;
+
       border: 1px solid #e5e7eb;
+
       border-radius: 12px;
+
       padding: 22px;
+
     }
+
 
     .panel h3 {
+
       margin-bottom: 20px;
+
     }
 
-    /* FORM */
+
+    /* =========================
+       FORM
+    ========================= */
 
     .checkbox-group {
+
       display: flex;
+
       align-items: center;
+
       gap: 9px;
+
       margin: 5px 0 18px;
+
     }
+
 
     .checkbox-group input {
+
       width: 17px;
+
       height: 17px;
+
     }
+
 
     .checkbox-group label {
+
       font-size: 14px;
+
       font-weight: 600;
+
     }
+
 
     .form-buttons {
+
       display: flex;
+
       gap: 10px;
+
     }
+
 
     .form-buttons button {
+
       flex: 1;
+
       border: none;
+
       padding: 11px;
+
       border-radius: 7px;
+
       cursor: pointer;
+
       font-weight: 600;
+
     }
+
 
     .save-btn {
+
       background: #2563eb;
+
       color: white;
+
     }
+
 
     .cancel-btn {
+
       background: #e5e7eb;
+
       color: #374151;
+
     }
+
 
     .form-message {
+
       margin-top: 12px;
+
       font-size: 14px;
+
     }
+
 
     .success {
+
       color: #15803d;
+
     }
+
 
     .error {
+
       color: #dc2626;
+
     }
 
-    /* EVENT LIST */
+
+    /* =========================
+       IMAGE UPLOAD
+    ========================= */
+
+    .image-upload-box {
+
+      border: 1px dashed #cbd5e1;
+
+      border-radius: 9px;
+
+      padding: 14px;
+
+      background: #f8fafc;
+
+    }
+
+
+    .image-upload-box input {
+
+      background: white;
+
+    }
+
+
+    .image-help {
+
+      display: block;
+
+      margin-top: 7px;
+
+      color: #6b7280;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+
+    }
+
+
+    .image-preview {
+
+      margin-top: 12px;
+
+      display: none;
+
+    }
+
+
+    .image-preview img {
+
+      width: 100%;
+
+      max-height: 220px;
+
+      object-fit: cover;
+
+      border-radius: 8px;
+
+      border: 1px solid #e5e7eb;
+
+    }
+
+
+    .existing-image {
+
+      margin-top: 12px;
+
+      display: none;
+
+    }
+
+
+    .existing-image-label {
+
+      display: block;
+
+      font-size: 12px;
+
+      color: #6b7280;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    .existing-image img {
+
+      width: 100%;
+
+      max-height: 220px;
+
+      object-fit: cover;
+
+      border-radius: 8px;
+
+      border: 1px solid #e5e7eb;
+
+    }
+
+
+    /* =========================
+       EVENTS LIST
+    ========================= */
 
     .events-list {
+
       display: flex;
+
       flex-direction: column;
+
       gap: 12px;
+
     }
+
 
     .admin-event {
+
       border: 1px solid #e5e7eb;
+
       border-radius: 10px;
+
       padding: 16px;
+
     }
+
 
     .admin-event-top {
+
       display: flex;
+
       justify-content: space-between;
+
       gap: 15px;
+
       align-items: flex-start;
+
     }
+
+
+    .admin-event-main {
+
+      display: flex;
+
+      gap: 14px;
+
+      min-width: 0;
+
+    }
+
+
+    .admin-event-poster {
+
+      width: 110px;
+
+      height: 75px;
+
+      object-fit: cover;
+
+      border-radius: 7px;
+
+      border: 1px solid #e5e7eb;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .no-poster {
+
+      width: 110px;
+
+      height: 75px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background: #f3f4f6;
+
+      color: #9ca3af;
+
+      border-radius: 7px;
+
+      font-size: 11px;
+
+      flex-shrink: 0;
+
+    }
+
 
     .admin-event h4 {
+
       font-size: 17px;
+
       margin-bottom: 7px;
+
     }
+
 
     .admin-event-info {
+
       color: #6b7280;
+
       font-size: 13px;
+
       line-height: 1.7;
+
     }
+
 
     .common-label {
+
       display: inline-block;
+
       margin-bottom: 8px;
+
       padding: 4px 8px;
+
       border-radius: 15px;
+
       background: #fef3c7;
+
       color: #92400e;
+
       font-size: 11px;
+
       font-weight: 600;
+
     }
 
+
     .event-actions {
+
       display: flex;
+
       gap: 7px;
+
       flex-shrink: 0;
+
     }
+
 
     .edit-btn,
     .delete-btn {
+
       border: none;
+
       padding: 7px 11px;
+
       border-radius: 6px;
+
       cursor: pointer;
+
       font-size: 13px;
+
     }
+
 
     .edit-btn {
+
       background: #dbeafe;
+
       color: #1d4ed8;
+
     }
+
 
     .delete-btn {
+
       background: #fee2e2;
+
       color: #b91c1c;
+
     }
+
 
     .no-events {
+
       padding: 30px;
+
       text-align: center;
+
       color: #6b7280;
+
       border: 1px dashed #d1d5db;
+
       border-radius: 10px;
+
     }
 
-    /* MOBILE */
+
+    /* =========================
+       MOBILE
+    ========================= */
 
     @media (max-width: 850px) {
 
       .dashboard-grid {
+
         grid-template-columns: 1fr;
+
       }
 
     }
+
 
     @media (max-width: 600px) {
 
       .header-inner {
+
         padding: 13px 15px;
+
       }
+
 
       .brand {
+
         font-size: 18px;
+
       }
+
 
       .view-btn {
+
         display: none;
+
       }
+
 
       main {
+
         padding: 22px 15px 40px;
+
       }
+
 
       .page-title h2 {
+
         font-size: 24px;
+
       }
+
 
       .panel {
+
         padding: 17px;
+
       }
+
 
       .admin-event-top {
+
         flex-direction: column;
+
       }
 
-      .event-actions {
+
+      .admin-event-main {
+
         width: 100%;
+
       }
+
+
+      .event-actions {
+
+        width: 100%;
+
+      }
+
 
       .edit-btn,
       .delete-btn {
+
         flex: 1;
+
       }
 
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- =========================
-       ADMIN LOGIN
-  ========================== -->
+
+  <!-- ==================================================
+       LOGIN PAGE
+  =================================================== -->
 
   <section id="loginPage">
 
@@ -404,7 +865,10 @@
 
       <h1>Admin</h1>
 
-      <p>Sign in to manage events</p>
+      <p>
+        Sign in to manage events
+      </p>
+
 
       <form id="loginForm">
 
@@ -457,11 +921,18 @@
   </section>
 
 
-  <!-- =========================
-       ADMIN APPLICATION
-  ========================== -->
 
-  <section id="adminApp" class="hidden">
+  <!-- ==================================================
+       ADMIN APPLICATION
+  =================================================== -->
+
+  <section
+    id="adminApp"
+    class="hidden"
+  >
+
+
+    <!-- HEADER -->
 
     <header>
 
@@ -471,6 +942,7 @@
           Event <span>Admin</span>
         </div>
 
+
         <div class="header-actions">
 
           <button
@@ -479,6 +951,7 @@
           >
             View Website
           </button>
+
 
           <button
             class="logout-btn"
@@ -494,11 +967,17 @@
     </header>
 
 
+
+    <!-- MAIN -->
+
     <main>
+
 
       <div class="page-title">
 
-        <h2>Event Management</h2>
+        <h2>
+          Event Management
+        </h2>
 
         <p>
           Add and manage events displayed on the website.
@@ -507,12 +986,13 @@
       </div>
 
 
+
       <div class="dashboard-grid">
 
 
-        <!-- =====================
-             ADD / EDIT EVENT
-        ====================== -->
+        <!-- ==================================================
+             EVENT FORM
+        =================================================== -->
 
         <div class="panel">
 
@@ -520,7 +1000,11 @@
             Add Event
           </h3>
 
+
           <form id="eventForm">
+
+
+            <!-- TITLE -->
 
             <div class="form-group">
 
@@ -538,6 +1022,9 @@
             </div>
 
 
+
+            <!-- DESCRIPTION -->
+
             <div class="form-group">
 
               <label for="eventDescription">
@@ -551,6 +1038,74 @@
 
             </div>
 
+
+
+            <!-- IMAGE -->
+
+            <div class="form-group">
+
+              <label for="eventImage">
+                Event Poster / Image
+              </label>
+
+
+              <div class="image-upload-box">
+
+                <input
+                  type="file"
+                  id="eventImage"
+                  accept="image/jpeg,image/png,image/webp,image/jpg"
+                >
+
+
+                <span class="image-help">
+                  JPG, JPEG, PNG or WEBP.
+                  Recommended poster size: 1200 × 675.
+                </span>
+
+
+                <!-- NEW IMAGE PREVIEW -->
+
+                <div
+                  id="imagePreview"
+                  class="image-preview"
+                >
+
+                  <img
+                    id="previewImage"
+                    src=""
+                    alt="New event poster preview"
+                  >
+
+                </div>
+
+
+                <!-- EXISTING IMAGE -->
+
+                <div
+                  id="existingImage"
+                  class="existing-image"
+                >
+
+                  <span class="existing-image-label">
+                    Current poster
+                  </span>
+
+                  <img
+                    id="existingImagePreview"
+                    src=""
+                    alt="Current event poster"
+                  >
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- DATE -->
 
             <div class="form-group">
 
@@ -567,6 +1122,9 @@
             </div>
 
 
+
+            <!-- TIME -->
+
             <div class="form-group">
 
               <label for="eventTime">
@@ -580,6 +1138,9 @@
 
             </div>
 
+
+
+            <!-- LOCATION -->
 
             <div class="form-group">
 
@@ -596,6 +1157,9 @@
             </div>
 
 
+
+            <!-- REGISTRATION -->
+
             <div class="form-group">
 
               <label for="registrationLink">
@@ -611,6 +1175,9 @@
             </div>
 
 
+
+            <!-- COMMON EVENT -->
+
             <div class="checkbox-group">
 
               <input
@@ -625,16 +1192,22 @@
             </div>
 
 
+
+            <!-- BUTTONS -->
+
             <div class="form-buttons">
 
               <button
                 type="submit"
                 class="save-btn"
               >
+
                 <span id="saveButtonText">
                   Add Event
                 </span>
+
               </button>
+
 
               <button
                 type="button"
@@ -652,20 +1225,23 @@
               class="form-message"
             ></div>
 
+
           </form>
 
         </div>
 
 
-        <!-- =====================
+
+        <!-- ==================================================
              EVENT LIST
-        ====================== -->
+        =================================================== -->
 
         <div class="panel">
 
           <h3>
             Posted Events
           </h3>
+
 
           <div
             id="eventsList"
@@ -682,17 +1258,25 @@
   </section>
 
 
+
+  <!-- ==================================================
+       JAVASCRIPT
+  =================================================== -->
+
   <script>
 
-    /* =========================
-       SUPABASE
-    ========================== */
+
+    /* ==================================================
+       SUPABASE CONFIGURATION
+    =================================================== */
 
     const SUPABASE_URL =
       "https://wuxluaekflqvvhtghrok.supabase.co";
 
+
     const SUPABASE_KEY =
       "sb_publishable_5lGI_aAjnq3uQKXBEPqUvA_yf6_eFKL";
+
 
     const supabaseClient =
       window.supabase.createClient(
@@ -701,56 +1285,136 @@
       );
 
 
-    /* =========================
+
+    /* ==================================================
+       SETTINGS
+    =================================================== */
+
+    const STORAGE_BUCKET =
+      "event-posters";
+
+
+    const MAX_IMAGE_SIZE =
+      5 * 1024 * 1024;
+
+
+
+    /* ==================================================
        VARIABLES
-    ========================== */
+    =================================================== */
 
     let events = [];
 
     let editingEventId = null;
 
+    let editingExistingImageUrl = null;
 
-    /* =========================
+
+
+    /* ==================================================
        ELEMENTS
-    ========================== */
+    =================================================== */
 
     const loginPage =
-      document.getElementById("loginPage");
+      document.getElementById(
+        "loginPage"
+      );
+
 
     const adminApp =
-      document.getElementById("adminApp");
+      document.getElementById(
+        "adminApp"
+      );
+
 
     const loginForm =
-      document.getElementById("loginForm");
+      document.getElementById(
+        "loginForm"
+      );
+
 
     const loginMessage =
-      document.getElementById("loginMessage");
+      document.getElementById(
+        "loginMessage"
+      );
+
 
     const logoutBtn =
-      document.getElementById("logoutBtn");
+      document.getElementById(
+        "logoutBtn"
+      );
+
 
     const eventForm =
-      document.getElementById("eventForm");
+      document.getElementById(
+        "eventForm"
+      );
+
 
     const eventsList =
-      document.getElementById("eventsList");
+      document.getElementById(
+        "eventsList"
+      );
+
 
     const formTitle =
-      document.getElementById("formTitle");
+      document.getElementById(
+        "formTitle"
+      );
+
 
     const saveButtonText =
-      document.getElementById("saveButtonText");
+      document.getElementById(
+        "saveButtonText"
+      );
+
 
     const cancelEditBtn =
-      document.getElementById("cancelEditBtn");
+      document.getElementById(
+        "cancelEditBtn"
+      );
+
 
     const formMessage =
-      document.getElementById("formMessage");
+      document.getElementById(
+        "formMessage"
+      );
 
 
-    /* =========================
+    const eventImage =
+      document.getElementById(
+        "eventImage"
+      );
+
+
+    const imagePreview =
+      document.getElementById(
+        "imagePreview"
+      );
+
+
+    const previewImage =
+      document.getElementById(
+        "previewImage"
+      );
+
+
+    const existingImage =
+      document.getElementById(
+        "existingImage"
+      );
+
+
+    const existingImagePreview =
+      document.getElementById(
+        "existingImagePreview"
+      );
+
+
+
+    /* ==================================================
        LOGIN
-    ========================== */
+    =================================================== */
 
     loginForm.addEventListener(
       "submit",
@@ -758,25 +1422,38 @@
 
         e.preventDefault();
 
+
         loginMessage.textContent = "";
+
 
         const email =
           document
-            .getElementById("loginEmail")
+            .getElementById(
+              "loginEmail"
+            )
             .value
             .trim();
 
+
         const password =
           document
-            .getElementById("loginPassword")
+            .getElementById(
+              "loginPassword"
+            )
             .value;
 
 
-        const { error } =
-          await supabaseClient.auth
+        const {
+          error
+        } =
+          await supabaseClient
+            .auth
             .signInWithPassword({
+
               email,
+
               password
+
             });
 
 
@@ -788,6 +1465,7 @@
             "Invalid email or password.";
 
           return;
+
         }
 
 
@@ -799,15 +1477,19 @@
     );
 
 
-    /* =========================
+
+    /* ==================================================
        LOGOUT
-    ========================== */
+    =================================================== */
 
     logoutBtn.addEventListener(
       "click",
       async function() {
 
-        await supabaseClient.auth.signOut();
+        await supabaseClient
+          .auth
+          .signOut();
+
 
         showLogin();
 
@@ -815,36 +1497,41 @@
     );
 
 
-    /* =========================
+
+    /* ==================================================
        AUTH STATE
-    ========================== */
+    =================================================== */
 
-    supabaseClient.auth.onAuthStateChange(
-      function(event, session) {
+    supabaseClient
+      .auth
+      .onAuthStateChange(
+        function(event, session) {
 
-        if (session) {
+          if (session) {
 
-          showAdmin();
+            showAdmin();
 
-        } else {
+          } else {
 
-          showLogin();
+            showLogin();
+
+          }
 
         }
-
-      }
-    );
+      );
 
 
-    /* =========================
+
+    /* ==================================================
        SHOW LOGIN
-    ========================== */
+    =================================================== */
 
     function showLogin() {
 
       loginPage.classList.remove(
         "hidden"
       );
+
 
       adminApp.classList.add(
         "hidden"
@@ -853,9 +1540,10 @@
     }
 
 
-    /* =========================
+
+    /* ==================================================
        SHOW ADMIN
-    ========================== */
+    =================================================== */
 
     async function showAdmin() {
 
@@ -863,18 +1551,21 @@
         "hidden"
       );
 
+
       adminApp.classList.remove(
         "hidden"
       );
+
 
       await loadEvents();
 
     }
 
 
-    /* =========================
+
+    /* ==================================================
        LOAD EVENTS
-    ========================== */
+    =================================================== */
 
     async function loadEvents() {
 
@@ -882,39 +1573,54 @@
         '<div class="no-events">Loading events...</div>';
 
 
-      const { data, error } =
+      const {
+        data,
+        error
+      } =
         await supabaseClient
           .from("events")
           .select("*")
-          .order("event_date", {
-            ascending: true
-          })
-          .order("event_time", {
-            ascending: true
-          });
+          .order(
+            "event_date",
+            {
+              ascending: true
+            }
+          )
+          .order(
+            "event_time",
+            {
+              ascending: true
+            }
+          );
 
 
       if (error) {
 
         console.error(error);
 
+
         eventsList.innerHTML =
           '<div class="no-events">Unable to load events.</div>';
 
+
         return;
+
       }
 
 
-      events = data || [];
+      events =
+        data || [];
+
 
       renderEvents();
 
     }
 
 
-    /* =========================
+
+    /* ==================================================
        RENDER EVENTS
-    ========================== */
+    =================================================== */
 
     function renderEvents() {
 
@@ -923,129 +1629,272 @@
         eventsList.innerHTML =
           '<div class="no-events">No events posted yet.</div>';
 
+
         return;
+
       }
 
 
       eventsList.innerHTML = "";
 
 
-      events.forEach(function(event) {
+      events.forEach(
+        function(event) {
 
-        const item =
-          document.createElement("div");
-
-        item.className =
-          "admin-event";
-
-
-        const commonLabel =
-          event.is_common
-            ? '<span class="common-label">COMMON EVENT</span>'
-            : "";
+          const item =
+            document.createElement(
+              "div"
+            );
 
 
-        const date =
-          formatDate(event.event_date);
+          item.className =
+            "admin-event";
 
 
-        const time =
-          event.event_time
-            ? formatTime(event.event_time)
-            : "";
+          const commonLabel =
+            event.is_common
+              ? '<span class="common-label">COMMON EVENT</span>'
+              : "";
 
 
-        item.innerHTML = `
+          const date =
+            formatDate(
+              event.event_date
+            );
 
-          <div class="admin-event-top">
 
-            <div>
+          const time =
+            event.event_time
+              ? formatTime(
+                  event.event_time
+                )
+              : "";
 
-              ${commonLabel}
 
-              <h4>
-                ${escapeHTML(event.title)}
-              </h4>
+          const poster =
+            event.image_url
+              ? `
+                <img
+                  class="admin-event-poster"
+                  src="${escapeAttribute(event.image_url)}"
+                  alt="Event poster"
+                >
+              `
+              : `
+                <div class="no-poster">
+                  No Poster
+                </div>
+              `;
 
-              <div class="admin-event-info">
+
+          item.innerHTML = `
+
+            <div class="admin-event-top">
+
+              <div class="admin-event-main">
+
+                ${poster}
 
                 <div>
-                  <strong>Date:</strong>
-                  ${date}
+
+                  ${commonLabel}
+
+                  <h4>
+                    ${escapeHTML(event.title)}
+                  </h4>
+
+                  <div class="admin-event-info">
+
+                    <div>
+                      <strong>Date:</strong>
+                      ${date}
+                    </div>
+
+
+                    ${
+                      time
+                        ? `
+                          <div>
+                            <strong>Time:</strong>
+                            ${escapeHTML(time)}
+                          </div>
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                      event.location
+                        ? `
+                          <div>
+                            <strong>Location:</strong>
+                            ${escapeHTML(
+                              event.location
+                            )}
+                          </div>
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                      event.registration_link
+                        ? `
+                          <div>
+                            Registration link added
+                          </div>
+                        `
+                        : ""
+                    }
+
+                  </div>
+
                 </div>
 
-                ${
-                  time
-                    ? `
-                      <div>
-                        <strong>Time:</strong>
-                        ${escapeHTML(time)}
-                      </div>
-                    `
-                    : ""
-                }
+              </div>
 
-                ${
-                  event.location
-                    ? `
-                      <div>
-                        <strong>Location:</strong>
-                        ${escapeHTML(
-                          event.location
-                        )}
-                      </div>
-                    `
-                    : ""
-                }
 
-                ${
-                  event.registration_link
-                    ? `
-                      <div>
-                        Registration link added
-                      </div>
-                    `
-                    : ""
-                }
+              <div class="event-actions">
+
+                <button
+                  class="edit-btn"
+                  onclick="editEvent(${event.id})"
+                >
+                  Edit
+                </button>
+
+
+                <button
+                  class="delete-btn"
+                  onclick="deleteEvent(${event.id})"
+                >
+                  Delete
+                </button>
 
               </div>
 
             </div>
 
-
-            <div class="event-actions">
-
-              <button
-                class="edit-btn"
-                onclick="editEvent(${event.id})"
-              >
-                Edit
-              </button>
-
-              <button
-                class="delete-btn"
-                onclick="deleteEvent(${event.id})"
-              >
-                Delete
-              </button>
-
-            </div>
-
-          </div>
-
-        `;
+          `;
 
 
-        eventsList.appendChild(item);
+          eventsList.appendChild(
+            item
+          );
 
-      });
+        }
+      );
 
     }
 
 
-    /* =========================
+
+    /* ==================================================
+       IMAGE PREVIEW
+    =================================================== */
+
+    eventImage.addEventListener(
+      "change",
+      function() {
+
+        const file =
+          eventImage.files[0];
+
+
+        if (!file) {
+
+          imagePreview.style.display =
+            "none";
+
+          return;
+
+        }
+
+
+        if (file.size > MAX_IMAGE_SIZE) {
+
+          alert(
+            "Image must be 5 MB or smaller."
+          );
+
+
+          eventImage.value = "";
+
+
+          imagePreview.style.display =
+            "none";
+
+
+          return;
+
+        }
+
+
+        const allowedTypes = [
+
+          "image/jpeg",
+
+          "image/jpg",
+
+          "image/png",
+
+          "image/webp"
+
+        ];
+
+
+        if (
+          !allowedTypes.includes(
+            file.type
+          )
+        ) {
+
+          alert(
+            "Only JPG, JPEG, PNG and WEBP images are allowed."
+          );
+
+
+          eventImage.value = "";
+
+
+          imagePreview.style.display =
+            "none";
+
+
+          return;
+
+        }
+
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          function(e) {
+
+            previewImage.src =
+              e.target.result;
+
+
+            imagePreview.style.display =
+              "block";
+
+          };
+
+
+        reader.readAsDataURL(
+          file
+        );
+
+      }
+    );
+
+
+
+    /* ==================================================
        ADD / UPDATE EVENT
-    ========================== */
+    =================================================== */
 
     eventForm.addEventListener(
       "submit",
@@ -1053,112 +1902,303 @@
 
         e.preventDefault();
 
+
         formMessage.textContent = "";
+
         formMessage.className =
           "form-message";
 
 
         const title =
           document
-            .getElementById("eventTitle")
+            .getElementById(
+              "eventTitle"
+            )
             .value
             .trim();
 
 
         const description =
           document
-            .getElementById("eventDescription")
+            .getElementById(
+              "eventDescription"
+            )
             .value
             .trim();
 
 
         const eventDate =
           document
-            .getElementById("eventDate")
+            .getElementById(
+              "eventDate"
+            )
             .value;
 
 
         const eventTime =
           document
-            .getElementById("eventTime")
+            .getElementById(
+              "eventTime"
+            )
             .value;
 
 
         const location =
           document
-            .getElementById("eventLocation")
+            .getElementById(
+              "eventLocation"
+            )
             .value
             .trim();
 
 
         const registrationLink =
           document
-            .getElementById("registrationLink")
+            .getElementById(
+              "registrationLink"
+            )
             .value
             .trim();
 
 
         const isCommon =
           document
-            .getElementById("isCommon")
+            .getElementById(
+              "isCommon"
+            )
             .checked;
 
 
+        const selectedImage =
+          eventImage.files[0];
+
+
+        /* IMAGE VALIDATION */
+
+        if (selectedImage) {
+
+          if (
+            selectedImage.size >
+            MAX_IMAGE_SIZE
+          ) {
+
+            formMessage.textContent =
+              "Image must be 5 MB or smaller.";
+
+            formMessage.classList.add(
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          const allowedTypes = [
+
+            "image/jpeg",
+
+            "image/jpg",
+
+            "image/png",
+
+            "image/webp"
+
+          ];
+
+
+          if (
+            !allowedTypes.includes(
+              selectedImage.type
+            )
+          ) {
+
+            formMessage.textContent =
+              "Only JPG, JPEG, PNG and WEBP images are allowed.";
+
+            formMessage.classList.add(
+              "error"
+            );
+
+            return;
+
+          }
+
+        }
+
+
+        let imageUrl =
+          editingExistingImageUrl;
+
+
+        /* ==================================================
+           UPLOAD NEW IMAGE
+        =================================================== */
+
+        if (selectedImage) {
+
+          formMessage.textContent =
+            "Uploading poster...";
+
+
+          const fileExtension =
+            getFileExtension(
+              selectedImage.name
+            );
+
+
+          const randomName =
+            crypto.randomUUID();
+
+
+          const filePath =
+            `${Date.now()}-${randomName}.${fileExtension}`;
+
+
+          const {
+            error: uploadError
+          } =
+            await supabaseClient
+              .storage
+              .from(
+                STORAGE_BUCKET
+              )
+              .upload(
+                filePath,
+                selectedImage,
+                {
+                  cacheControl: "3600",
+                  upsert: false
+                }
+              );
+
+
+          if (uploadError) {
+
+            console.error(
+              uploadError
+            );
+
+
+            formMessage.textContent =
+              "Poster upload failed.";
+
+            formMessage.classList.add(
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          const {
+            data: publicData
+          } =
+            supabaseClient
+              .storage
+              .from(
+                STORAGE_BUCKET
+              )
+              .getPublicUrl(
+                filePath
+              );
+
+
+          imageUrl =
+            publicData.publicUrl;
+
+        }
+
+
+
+        /* ==================================================
+           EVENT DATA
+        =================================================== */
+
         const eventData = {
 
-          title: title,
+          title:
+
+            title,
 
           description:
+
             description || null,
 
           event_date:
+
             eventDate,
 
           event_time:
+
             eventTime || null,
 
           location:
+
             location || null,
 
           registration_link:
+
             registrationLink || null,
 
           is_common:
-            isCommon
+
+            isCommon,
+
+          image_url:
+
+            imageUrl || null
 
         };
 
 
+
+        /* ==================================================
+           UPDATE
+        =================================================== */
+
         let result;
 
 
-        /* UPDATE */
-
-        if (editingEventId !== null) {
+        if (
+          editingEventId !== null
+        ) {
 
           result =
             await supabaseClient
               .from("events")
               .update(eventData)
-              .eq("id", editingEventId);
+              .eq(
+                "id",
+                editingEventId
+              );
 
         }
 
-        /* INSERT */
+
+        /* ==================================================
+           INSERT
+        =================================================== */
 
         else {
 
           result =
             await supabaseClient
               .from("events")
-              .insert([eventData]);
+              .insert([
+                eventData
+              ]);
 
         }
 
 
         if (result.error) {
 
-          console.error(result.error);
+          console.error(
+            result.error
+          );
+
 
           formMessage.textContent =
             "Unable to save event.";
@@ -1167,9 +2207,14 @@
             "error"
           );
 
+
           return;
+
         }
 
+
+
+        /* SUCCESS */
 
         formMessage.textContent =
           editingEventId !== null
@@ -1184,27 +2229,35 @@
 
         resetForm();
 
+
         await loadEvents();
 
       }
     );
 
 
-    /* =========================
+
+    /* ==================================================
        EDIT EVENT
-    ========================== */
+    =================================================== */
 
     window.editEvent =
       function(id) {
 
         const event =
-          events.find(function(item) {
-            return item.id === id;
-          });
+          events.find(
+            function(item) {
+
+              return item.id === id;
+
+            }
+          );
 
 
         if (!event) {
+
           return;
+
         }
 
 
@@ -1212,49 +2265,122 @@
           event.id;
 
 
+        editingExistingImageUrl =
+          event.image_url || null;
+
+
+
+        /* TITLE */
+
         document
-          .getElementById("eventTitle")
+          .getElementById(
+            "eventTitle"
+          )
           .value =
           event.title || "";
 
 
+
+        /* DESCRIPTION */
+
         document
-          .getElementById("eventDescription")
+          .getElementById(
+            "eventDescription"
+          )
           .value =
           event.description || "";
 
 
+
+        /* DATE */
+
         document
-          .getElementById("eventDate")
+          .getElementById(
+            "eventDate"
+          )
           .value =
           event.event_date || "";
 
 
+
+        /* TIME */
+
         document
-          .getElementById("eventTime")
+          .getElementById(
+            "eventTime"
+          )
           .value =
           event.event_time
-            ? event.event_time.substring(0, 5)
+            ? event.event_time.substring(
+                0,
+                5
+              )
             : "";
 
 
+
+        /* LOCATION */
+
         document
-          .getElementById("eventLocation")
+          .getElementById(
+            "eventLocation"
+          )
           .value =
           event.location || "";
 
 
+
+        /* REGISTRATION */
+
         document
-          .getElementById("registrationLink")
+          .getElementById(
+            "registrationLink"
+          )
           .value =
           event.registration_link || "";
 
 
+
+        /* COMMON */
+
         document
-          .getElementById("isCommon")
+          .getElementById(
+            "isCommon"
+          )
           .checked =
           event.is_common === true;
 
+
+
+        /* EXISTING IMAGE */
+
+        eventImage.value = "";
+
+        imagePreview.style.display =
+          "none";
+
+
+        if (event.image_url) {
+
+          existingImagePreview.src =
+            event.image_url;
+
+
+          existingImage.style.display =
+            "block";
+
+        }
+
+        else {
+
+          existingImage.style.display =
+            "none";
+
+        }
+
+
+
+        /* FORM TITLE */
 
         formTitle.textContent =
           "Edit Event";
@@ -1270,28 +2396,38 @@
 
 
         window.scrollTo({
+
           top: 0,
+
           behavior: "smooth"
+
         });
 
       };
 
 
-    /* =========================
+
+    /* ==================================================
        DELETE EVENT
-    ========================== */
+    =================================================== */
 
     window.deleteEvent =
       async function(id) {
 
         const event =
-          events.find(function(item) {
-            return item.id === id;
-          });
+          events.find(
+            function(item) {
+
+              return item.id === id;
+
+            }
+          );
 
 
         if (!event) {
+
           return;
+
         }
 
 
@@ -1302,31 +2438,45 @@
 
 
         if (!confirmed) {
+
           return;
+
         }
 
 
-        const { error } =
+        const {
+          error
+        } =
           await supabaseClient
             .from("events")
             .delete()
-            .eq("id", id);
+            .eq(
+              "id",
+              id
+            );
 
 
         if (error) {
 
           console.error(error);
 
+
           alert(
             "Unable to delete event."
           );
 
+
           return;
+
         }
 
 
-        if (editingEventId === id) {
+        if (
+          editingEventId === id
+        ) {
+
           resetForm();
+
         }
 
 
@@ -1335,9 +2485,10 @@
       };
 
 
-    /* =========================
+
+    /* ==================================================
        CANCEL EDIT
-    ========================== */
+    =================================================== */
 
     cancelEditBtn.addEventListener(
       "click",
@@ -1349,32 +2500,63 @@
     );
 
 
-    /* =========================
+
+    /* ==================================================
        RESET FORM
-    ========================== */
+    =================================================== */
 
     function resetForm() {
 
-      editingEventId = null;
+      editingEventId =
+        null;
+
+
+      editingExistingImageUrl =
+        null;
+
 
       eventForm.reset();
+
 
       formTitle.textContent =
         "Add Event";
 
+
       saveButtonText.textContent =
         "Add Event";
+
 
       cancelEditBtn.classList.add(
         "hidden"
       );
 
+
+      imagePreview.style.display =
+        "none";
+
+
+      existingImage.style.display =
+        "none";
+
+
+      previewImage.src =
+        "";
+
+
+      existingImagePreview.src =
+        "";
+
+
+      eventImage.value =
+        "";
+
     }
 
 
-    /* =========================
+
+    /* ==================================================
        OPEN USER WEBSITE
-    ========================== */
+    =================================================== */
 
     function openUserSite() {
 
@@ -1386,6 +2568,7 @@
             "index.html"
           );
 
+
       window.open(
         currentURL,
         "_blank"
@@ -1394,15 +2577,41 @@
     }
 
 
-    /* =========================
-       DATE HELPERS
-    ========================== */
 
-    function formatDate(dateString) {
+    /* ==================================================
+       FILE EXTENSION
+    =================================================== */
+
+    function getFileExtension(
+      filename
+    ) {
+
+      const parts =
+        filename.split(".");
+
+
+      return (
+        parts[
+          parts.length - 1
+        ] || "jpg"
+      ).toLowerCase();
+
+    }
+
+
+
+    /* ==================================================
+       DATE FORMAT
+    =================================================== */
+
+    function formatDate(
+      dateString
+    ) {
 
       const date =
         new Date(
-          dateString + "T00:00:00"
+          dateString +
+          "T00:00:00"
         );
 
 
@@ -1410,7 +2619,9 @@
         undefined,
         {
           day: "numeric",
+
           month: "long",
+
           year: "numeric"
         }
       );
@@ -1418,7 +2629,14 @@
     }
 
 
-    function formatTime(timeString) {
+
+    /* ==================================================
+       TIME FORMAT
+    =================================================== */
+
+    function formatTime(
+      timeString
+    ) {
 
       const parts =
         timeString.split(":");
@@ -1429,9 +2647,13 @@
 
 
       date.setHours(
+
         Number(parts[0]),
+
         Number(parts[1]),
+
         0
+
       );
 
 
@@ -1439,6 +2661,7 @@
         undefined,
         {
           hour: "numeric",
+
           minute: "2-digit"
         }
       );
@@ -1446,37 +2669,50 @@
     }
 
 
-    /* =========================
-       SECURITY
-    ========================== */
 
-    function escapeHTML(value) {
+    /* ==================================================
+       HTML ESCAPE
+    =================================================== */
+
+    function escapeHTML(
+      value
+    ) {
 
       if (
+
         value === null ||
+
         value === undefined
+
       ) {
+
         return "";
+
       }
 
 
       return String(value)
+
         .replace(
           /&/g,
           "&amp;"
         )
+
         .replace(
           /</g,
           "&lt;"
         )
+
         .replace(
           />/g,
           "&gt;"
         )
+
         .replace(
           /"/g,
           "&quot;"
         )
+
         .replace(
           /'/g,
           "&#039;"
@@ -1485,16 +2721,29 @@
     }
 
 
-    /* =========================
+
+    function escapeAttribute(
+      value
+    ) {
+
+      return escapeHTML(value);
+
+    }
+
+
+
+    /* ==================================================
        INITIAL SESSION
-    ========================== */
+    =================================================== */
 
     async function initialize() {
 
       const {
+
         data: {
           session
         }
+
       } =
         await supabaseClient
           .auth
@@ -1505,7 +2754,9 @@
 
         showAdmin();
 
-      } else {
+      }
+
+      else {
 
         showLogin();
 
@@ -1519,4 +2770,5 @@
   </script>
 
 </body>
+
 </html>
