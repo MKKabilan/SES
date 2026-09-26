@@ -500,772 +500,616 @@
 ```
 
   </section>
+<script>
+const SUPABASE_URL =
+  "https://wuxluaekflqvvhtghrok.supabase.co";
 
-  <script>
+const SUPABASE_KEY =
+  "sb_publishable_5lGI_aAjnq3uQKXBEPqUvA_yf6_eFKL";
 
-    /* ==============================
-       SUPABASE CONFIGURATION
-    ============================== */
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-    const SUPABASE_URL =
-      "https://wuxluaekflqvvhtghrok.supabase.co";
+let events = [];
+let calendarDate = new Date();
 
-    const SUPABASE_KEY =
-      "sb_publishable_5lGI_aAjnq3uQKXBEPqUvA_yf6_eFKL";
-
-    const { createClient } =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-
-    /* ==============================
-       GLOBAL VARIABLES
-    ============================== */
-
-    let events = [];
-
-    let calendarDate = new Date();
-
-
-    /* ==============================
-       ELEMENTS
-    ============================== */
-
-    const loginPage =
-      document.getElementById("loginPage");
-
-    const app =
-      document.getElementById("app");
-
-    const loginForm =
-      document.getElementById("loginForm");
-
-    const loginMessage =
-      document.getElementById("loginMessage");
-
-    const eventsContainer =
-      document.getElementById("eventsContainer");
-
-    const logoutBtn =
-      document.getElementById("logoutBtn");
-
-    const calendarMonth =
-      document.getElementById("calendarMonth");
-
-    const calendarDays =
-      document.getElementById("calendarDays");
-
-    const selectedDateEvents =
-      document.getElementById("selectedDateEvents");
+const loginPage = document.getElementById("loginPage");
+const app = document.getElementById("app");
+const loginForm = document.getElementById("loginForm");
+const loginMessage = document.getElementById("loginMessage");
+const eventsContainer = document.getElementById("eventsContainer");
+const logoutBtn = document.getElementById("logoutBtn");
+const calendarMonth = document.getElementById("calendarMonth");
+const calendarDays = document.getElementById("calendarDays");
+const selectedDateEvents =
+  document.getElementById("selectedDateEvents");
 
 
-    /* ==============================
-       LOGIN
-    ============================== */
+/* LOGIN */
 
-    loginForm.addEventListener("submit", async function(e) {
+loginForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-      e.preventDefault();
+  loginMessage.textContent = "";
 
-      loginMessage.textContent = "";
+  const email =
+    document.getElementById("email").value.trim();
 
-      const email =
-        document.getElementById("email").value.trim();
+  const password =
+    document.getElementById("password").value;
 
-      const password =
-        document.getElementById("password").value;
+  const { error } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
 
-      const { error } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
+  if (error) {
+    console.error(error);
+    loginMessage.textContent =
+      "Invalid email or password.";
+    return;
+  }
 
-      if (error) {
+  loginForm.reset();
+  showApp();
+});
 
-        loginMessage.textContent =
-          "Invalid email or password.";
 
-        return;
-      }
+/* LOGOUT */
 
-      loginForm.reset();
+logoutBtn.addEventListener("click", async function() {
+  await supabaseClient.auth.signOut();
+  showLogin();
+});
 
+
+/* AUTH STATE */
+
+supabaseClient.auth.onAuthStateChange(
+  function(event, session) {
+
+    if (session) {
       showApp();
-
-    });
-
-
-    /* ==============================
-       LOGOUT
-    ============================== */
-
-    logoutBtn.addEventListener("click", async function() {
-
-      await supabase.auth.signOut();
-
+    } else {
       showLogin();
+    }
 
-    });
+  }
+);
 
 
-    /* ==============================
-       AUTH STATE
-    ============================== */
+/* SHOW LOGIN */
 
-    supabase.auth.onAuthStateChange(
-      async function(event, session) {
+function showLogin() {
+  loginPage.classList.remove("hidden");
+  app.classList.add("hidden");
+}
 
-        if (session) {
-          showApp();
-        } else {
-          showLogin();
+
+/* SHOW APP */
+
+async function showApp() {
+  loginPage.classList.add("hidden");
+  app.classList.remove("hidden");
+
+  await loadEvents();
+}
+
+
+/* LOAD EVENTS */
+
+async function loadEvents() {
+
+  eventsContainer.innerHTML =
+    '<div class="no-events">Loading events...</div>';
+
+  const { data, error } =
+    await supabaseClient
+      .from("events")
+      .select("*")
+      .order("event_date", {
+        ascending: true
+      })
+      .order("event_time", {
+        ascending: true
+      });
+
+  if (error) {
+
+    console.error(error);
+
+    eventsContainer.innerHTML =
+      '<div class="no-events">Unable to load events.</div>';
+
+    return;
+  }
+
+  events = data || [];
+
+  renderEvents();
+  renderCalendar();
+}
+
+
+/* RENDER EVENTS */
+
+function renderEvents() {
+
+  if (!events.length) {
+
+    eventsContainer.innerHTML =
+      '<div class="no-events">No events available.</div>';
+
+    return;
+  }
+
+  eventsContainer.innerHTML = "";
+
+  events.forEach(function(event) {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "event-card";
+
+    const commonBadge =
+      event.is_common
+        ? '<span class="common-badge">Common Event</span>'
+        : "";
+
+    const registrationButton =
+      event.registration_link
+        ? `
+          <a
+            class="register-btn"
+            href="${escapeAttribute(event.registration_link)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Register
+          </a>
+        `
+        : "";
+
+    const formattedDate =
+      formatDate(event.event_date);
+
+    const formattedTime =
+      event.event_time
+        ? formatTime(event.event_time)
+        : "";
+
+    card.innerHTML = `
+
+      ${commonBadge}
+
+      <h3>${escapeHTML(event.title)}</h3>
+
+      <div class="event-info">
+
+        <div>
+          <strong>Date:</strong>
+          ${formattedDate}
+        </div>
+
+        ${
+          formattedTime
+            ? `
+              <div>
+                <strong>Time:</strong>
+                ${escapeHTML(formattedTime)}
+              </div>
+            `
+            : ""
         }
 
+        ${
+          event.location
+            ? `
+              <div>
+                <strong>Location:</strong>
+                ${escapeHTML(event.location)}
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+
+      ${
+        event.description
+          ? `
+            <div class="event-description">
+              ${escapeHTML(event.description)}
+            </div>
+          `
+          : ""
+      }
+
+      ${registrationButton}
+
+    `;
+
+    eventsContainer.appendChild(card);
+
+  });
+}
+
+
+/* CALENDAR */
+
+function renderCalendar() {
+
+  const year =
+    calendarDate.getFullYear();
+
+  const month =
+    calendarDate.getMonth();
+
+  const monthName =
+    calendarDate.toLocaleString(
+      "default",
+      {
+        month: "long"
       }
     );
 
+  calendarMonth.textContent =
+    `${monthName} ${year}`;
 
-    /* ==============================
-       SHOW LOGIN
-    ============================== */
+  calendarDays.innerHTML = "";
 
-    function showLogin() {
+  const firstDay =
+    new Date(year, month, 1).getDay();
 
-      loginPage.classList.remove("hidden");
+  const daysInMonth =
+    new Date(year, month + 1, 0).getDate();
 
-      app.classList.add("hidden");
 
-    }
+  for (
+    let i = 0;
+    i < firstDay;
+    i++
+  ) {
 
+    const empty =
+      document.createElement("div");
 
-    /* ==============================
-       SHOW APP
-    ============================== */
+    empty.className =
+      "calendar-day empty";
 
-    async function showApp() {
+    calendarDays.appendChild(empty);
+  }
 
-      loginPage.classList.add("hidden");
 
-      app.classList.remove("hidden");
+  for (
+    let day = 1;
+    day <= daysInMonth;
+    day++
+  ) {
 
-      await loadEvents();
+    const cell =
+      document.createElement("div");
 
-    }
+    cell.className =
+      "calendar-day";
 
+    const number =
+      document.createElement("div");
 
-    /* ==============================
-       LOAD EVENTS
-    ============================== */
+    number.className =
+      "day-number";
 
-    async function loadEvents() {
+    number.textContent =
+      day;
 
-      eventsContainer.innerHTML =
-        '<div class="no-events">Loading events...</div>';
+    cell.appendChild(number);
 
-      const { data, error } =
-        await supabase
-          .from("events")
-          .select("*")
-          .order("event_date", {
-            ascending: true
-          })
-          .order("event_time", {
-            ascending: true
-          });
-
-      if (error) {
-
-        console.error(error);
-
-        eventsContainer.innerHTML =
-          '<div class="no-events">Unable to load events.</div>';
-
-        return;
-      }
-
-      events = data || [];
-
-      renderEvents();
-
-      renderCalendar();
-
-    }
-
-
-    /* ==============================
-       RENDER EVENTS
-    ============================== */
-
-    function renderEvents() {
-
-      if (!events.length) {
-
-        eventsContainer.innerHTML =
-          '<div class="no-events">No events available.</div>';
-
-        return;
-      }
-
-      eventsContainer.innerHTML = "";
-
-      events.forEach(function(event) {
-
-        const card =
-          document.createElement("div");
-
-        card.className = "event-card";
-
-        let commonBadge = "";
-
-        if (event.is_common) {
-
-          commonBadge =
-            '<span class="common-badge">Common Event</span>';
-
-        }
-
-        let registrationButton = "";
-
-        if (event.registration_link) {
-
-          registrationButton = `
-            <a
-              class="register-btn"
-              href="${escapeAttribute(event.registration_link)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Register
-            </a>
-          `;
-
-        }
-
-        const formattedDate =
-          formatDate(event.event_date);
-
-        const formattedTime =
-          event.event_time
-            ? formatTime(event.event_time)
-            : "";
-
-        card.innerHTML = `
-
-          ${commonBadge}
-
-          <h3>${escapeHTML(event.title)}</h3>
-
-          <div class="event-info">
-
-            <div>
-              <strong>Date:</strong>
-              ${formattedDate}
-            </div>
-
-            ${
-              formattedTime
-              ? `
-                <div>
-                  <strong>Time:</strong>
-                  ${escapeHTML(formattedTime)}
-                </div>
-              `
-              : ""
-            }
-
-            ${
-              event.location
-              ? `
-                <div>
-                  <strong>Location:</strong>
-                  ${escapeHTML(event.location)}
-                </div>
-              `
-              : ""
-            }
-
-          </div>
-
-          ${
-            event.description
-            ? `
-              <div class="event-description">
-                ${escapeHTML(event.description)}
-              </div>
-            `
-            : ""
-          }
-
-          ${registrationButton}
-
-        `;
-
-        eventsContainer.appendChild(card);
-
-      });
-
-    }
-
-
-    /* ==============================
-       CALENDAR
-    ============================== */
-
-    function renderCalendar() {
-
-      const year =
-        calendarDate.getFullYear();
-
-      const month =
-        calendarDate.getMonth();
-
-      const monthName =
-        calendarDate.toLocaleString(
-          "default",
-          {
-            month: "long"
-          }
-        );
-
-      calendarMonth.textContent =
-        `${monthName} ${year}`;
-
-      calendarDays.innerHTML = "";
-
-      const firstDay =
-        new Date(year, month, 1).getDay();
-
-      const daysInMonth =
-        new Date(year, month + 1, 0).getDate();
-
-
-      /* EMPTY DAYS */
-
-      for (
-        let i = 0;
-        i < firstDay;
-        i++
-      ) {
-
-        const empty =
-          document.createElement("div");
-
-        empty.className =
-          "calendar-day empty";
-
-        calendarDays.appendChild(empty);
-
-      }
-
-
-      /* MONTH DAYS */
-
-      for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-      ) {
-
-        const cell =
-          document.createElement("div");
-
-        cell.className =
-          "calendar-day";
-
-        const number =
-          document.createElement("div");
-
-        number.className =
-          "day-number";
-
-        number.textContent =
-          day;
-
-        cell.appendChild(number);
-
-
-        const dateString =
-          createDateString(
-            year,
-            month + 1,
-            day
-          );
-
-
-        const dayEvents =
-          events.filter(function(event) {
-
-            return event.event_date === dateString;
-
-          });
-
-
-        dayEvents.forEach(function(event) {
-
-          const eventDot =
-            document.createElement("div");
-
-          eventDot.className =
-            "event-dot";
-
-          if (event.is_common) {
-
-            eventDot.classList.add(
-              "common-dot"
-            );
-
-          }
-
-          eventDot.textContent =
-            event.title;
-
-          cell.appendChild(eventDot);
-
-        });
-
-
-        cell.addEventListener(
-          "click",
-          function() {
-
-            showDateEvents(
-              dateString
-            );
-
-          }
-        );
-
-
-        calendarDays.appendChild(cell);
-
-      }
-
-    }
-
-
-    /* ==============================
-       DATE EVENTS
-    ============================== */
-
-    function showDateEvents(dateString) {
-
-      const dayEvents =
-        events.filter(function(event) {
-
-          return event.event_date === dateString;
-
-        });
-
-
-      selectedDateEvents.innerHTML = "";
-
-      const heading =
-        document.createElement("h3");
-
-      heading.textContent =
-        formatDate(dateString);
-
-      selectedDateEvents.appendChild(
-        heading
+    const dateString =
+      createDateString(
+        year,
+        month + 1,
+        day
       );
 
+    const dayEvents =
+      events.filter(function(event) {
+        return event.event_date === dateString;
+      });
 
-      if (!dayEvents.length) {
+    dayEvents.forEach(function(event) {
 
-        const message =
-          document.createElement("div");
-
-        message.className =
-          "no-events";
-
-        message.textContent =
-          "No events on this date.";
-
-        selectedDateEvents.appendChild(
-          message
-        );
-
-        return;
-      }
-
-
-      const grid =
+      const eventDot =
         document.createElement("div");
 
-      grid.className =
-        "events-grid";
+      eventDot.className =
+        "event-dot";
+
+      if (event.is_common) {
+        eventDot.classList.add("common-dot");
+      }
+
+      eventDot.textContent =
+        event.title;
+
+      cell.appendChild(eventDot);
+    });
+
+    cell.addEventListener(
+      "click",
+      function() {
+        showDateEvents(dateString);
+      }
+    );
+
+    calendarDays.appendChild(cell);
+  }
+}
 
 
-      dayEvents.forEach(function(event) {
+/* DATE EVENTS */
 
-        const card =
-          document.createElement("div");
+function showDateEvents(dateString) {
 
-        card.className =
-          "event-card";
+  const dayEvents =
+    events.filter(function(event) {
+      return event.event_date === dateString;
+    });
 
-        let commonBadge = "";
+  selectedDateEvents.innerHTML = "";
 
-        if (event.is_common) {
+  const heading =
+    document.createElement("h3");
 
-          commonBadge =
-            '<span class="common-badge">Common Event</span>';
+  heading.textContent =
+    formatDate(dateString);
 
-        }
+  selectedDateEvents.appendChild(heading);
 
-        let registrationButton = "";
 
-        if (event.registration_link) {
+  if (!dayEvents.length) {
 
-          registrationButton = `
-            <a
-              class="register-btn"
-              href="${escapeAttribute(event.registration_link)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Register
-            </a>
-          `;
+    const message =
+      document.createElement("div");
 
-        }
+    message.className =
+      "no-events";
 
-        card.innerHTML = `
+    message.textContent =
+      "No events on this date.";
 
-          ${commonBadge}
+    selectedDateEvents.appendChild(message);
 
-          <h3>${escapeHTML(event.title)}</h3>
+    return;
+  }
 
-          <div class="event-info">
 
-            ${
-              event.event_time
-              ? `
-                <div>
-                  <strong>Time:</strong>
-                  ${escapeHTML(
-                    formatTime(event.event_time)
-                  )}
-                </div>
-              `
-              : ""
-            }
+  const grid =
+    document.createElement("div");
 
-            ${
-              event.location
-              ? `
-                <div>
-                  <strong>Location:</strong>
-                  ${escapeHTML(event.location)}
-                </div>
-              `
-              : ""
-            }
+  grid.className =
+    "events-grid";
 
-          </div>
 
-          ${
-            event.description
+  dayEvents.forEach(function(event) {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "event-card";
+
+    const commonBadge =
+      event.is_common
+        ? '<span class="common-badge">Common Event</span>'
+        : "";
+
+    const registrationButton =
+      event.registration_link
+        ? `
+          <a
+            class="register-btn"
+            href="${escapeAttribute(event.registration_link)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Register
+          </a>
+        `
+        : "";
+
+    card.innerHTML = `
+
+      ${commonBadge}
+
+      <h3>${escapeHTML(event.title)}</h3>
+
+      <div class="event-info">
+
+        ${
+          event.event_time
             ? `
-              <div class="event-description">
-                ${escapeHTML(event.description)}
+              <div>
+                <strong>Time:</strong>
+                ${escapeHTML(
+                  formatTime(event.event_time)
+                )}
               </div>
             `
             : ""
-          }
-
-          ${registrationButton}
-
-        `;
-
-        grid.appendChild(card);
-
-      });
-
-
-      selectedDateEvents.appendChild(grid);
-
-    }
-
-
-    /* ==============================
-       CALENDAR NAVIGATION
-    ============================== */
-
-    document
-      .getElementById("previousMonth")
-      .addEventListener(
-        "click",
-        function() {
-
-          calendarDate.setMonth(
-            calendarDate.getMonth() - 1
-          );
-
-          renderCalendar();
-
         }
-      );
 
-
-    document
-      .getElementById("nextMonth")
-      .addEventListener(
-        "click",
-        function() {
-
-          calendarDate.setMonth(
-            calendarDate.getMonth() + 1
-          );
-
-          renderCalendar();
-
+        ${
+          event.location
+            ? `
+              <div>
+                <strong>Location:</strong>
+                ${escapeHTML(event.location)}
+              </div>
+            `
+            : ""
         }
-      );
 
+      </div>
 
-    document
-      .getElementById("todayBtn")
-      .addEventListener(
-        "click",
-        function() {
-
-          calendarDate =
-            new Date();
-
-          renderCalendar();
-
-        }
-      );
-
-
-    /* ==============================
-       DATE HELPERS
-    ============================== */
-
-    function createDateString(
-      year,
-      month,
-      day
-    ) {
-
-      return (
-        year +
-        "-" +
-        String(month).padStart(2, "0") +
-        "-" +
-        String(day).padStart(2, "0")
-      );
-
-    }
-
-
-    function formatDate(dateString) {
-
-      const date =
-        new Date(
-          dateString + "T00:00:00"
-        );
-
-      return date.toLocaleDateString(
-        undefined,
-        {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        }
-      );
-
-    }
-
-
-    function formatTime(timeString) {
-
-      const parts =
-        timeString.split(":");
-
-      const date =
-        new Date();
-
-      date.setHours(
-        Number(parts[0]),
-        Number(parts[1]),
-        0
-      );
-
-      return date.toLocaleTimeString(
-        undefined,
-        {
-          hour: "numeric",
-          minute: "2-digit"
-        }
-      );
-
-    }
-
-
-    /* ==============================
-       SECURITY HELPERS
-    ============================== */
-
-    function escapeHTML(value) {
-
-      if (value === null ||
-          value === undefined) {
-
-        return "";
-
+      ${
+        event.description
+          ? `
+            <div class="event-description">
+              ${escapeHTML(event.description)}
+            </div>
+          `
+          : ""
       }
 
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      ${registrationButton}
 
+    `;
+
+    grid.appendChild(card);
+  });
+
+  selectedDateEvents.appendChild(grid);
+}
+
+
+/* CALENDAR NAVIGATION */
+
+document
+  .getElementById("previousMonth")
+  .addEventListener("click", function() {
+
+    calendarDate.setMonth(
+      calendarDate.getMonth() - 1
+    );
+
+    renderCalendar();
+  });
+
+
+document
+  .getElementById("nextMonth")
+  .addEventListener("click", function() {
+
+    calendarDate.setMonth(
+      calendarDate.getMonth() + 1
+    );
+
+    renderCalendar();
+  });
+
+
+document
+  .getElementById("todayBtn")
+  .addEventListener("click", function() {
+
+    calendarDate = new Date();
+
+    renderCalendar();
+  });
+
+
+/* HELPERS */
+
+function createDateString(year, month, day) {
+
+  return (
+    year +
+    "-" +
+    String(month).padStart(2, "0") +
+    "-" +
+    String(day).padStart(2, "0")
+  );
+}
+
+
+function formatDate(dateString) {
+
+  const date =
+    new Date(dateString + "T00:00:00");
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
     }
+  );
+}
 
 
-    function escapeAttribute(value) {
+function formatTime(timeString) {
 
-      return escapeHTML(value);
+  const parts =
+    timeString.split(":");
 
+  const date = new Date();
+
+  date.setHours(
+    Number(parts[0]),
+    Number(parts[1]),
+    0
+  );
+
+  return date.toLocaleTimeString(
+    undefined,
+    {
+      hour: "numeric",
+      minute: "2-digit"
     }
+  );
+}
 
 
-    /* ==============================
-       INITIAL AUTH CHECK
-    ============================== */
+function escapeHTML(value) {
 
-    async function initialize() {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
 
-      const {
-        data: {
-          session
-        }
-      } =
-        await supabase.auth.getSession();
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-      if (session) {
 
-        showApp();
+function escapeAttribute(value) {
+  return escapeHTML(value);
+}
 
-      } else {
 
-        showLogin();
+/* INITIAL CHECK */
 
-      }
+async function initialize() {
 
+  const {
+    data: {
+      session
     }
+  } =
+    await supabaseClient.auth.getSession();
 
+  if (session) {
+    showApp();
+  } else {
+    showLogin();
+  }
+}
 
-    initialize();
+initialize();
 
-  </script>
+</script>
 
 </body>
 </html>
