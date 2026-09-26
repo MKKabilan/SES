@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin - Events</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 35px;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .login-box h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #2563eb;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .primary-btn:hover {
+      background: #1d4ed8;
+    }
+
+    #loginMessage {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    /* HEADER */
+
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      padding: 15px 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .brand {
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .brand span {
+      color: #2563eb;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .view-btn {
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #374151;
+      padding: 9px 14px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .logout-btn {
+      border: none;
+      background: #ef4444;
+      color: white;
+      padding: 9px 15px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    /* MAIN */
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px 20px 50px;
+    }
+
+    .page-title {
+      margin-bottom: 25px;
+    }
+
+    .page-title h2 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .page-title p {
+      color: #6b7280;
+    }
+
+    /* DASHBOARD */
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 25px;
+      align-items: start;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 22px;
+    }
+
+    .panel h3 {
+      margin-bottom: 20px;
+    }
+
+    /* FORM */
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 5px 0 18px;
+    }
+
+    .checkbox-group input {
+      width: 17px;
+      height: 17px;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .form-buttons button {
+      flex: 1;
+      border: none;
+      padding: 11px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .save-btn {
+      background: #2563eb;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .form-message {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .success {
+      color: #15803d;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    /* EVENT LIST */
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .admin-event {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .admin-event-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .admin-event h4 {
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
+
+    .admin-event-info {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .common-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      border-radius: 15px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .edit-btn,
+    .delete-btn {
+      border: none;
+      padding: 7px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .edit-btn {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .delete-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .no-events {
+      padding: 30px;
+      text-align: center;
+      color: #6b7280;
+      border: 1px dashed #d1d5db;
+      border-radius: 10px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 850px) {
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .header-inner {
+        padding: 13px 15px;
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .view-btn {
+        display: none;
+      }
+
+      main {
+        padding: 22px 15px 40px;
+      }
+
+      .page-title h2 {
+        font-size: 24px;
+      }
+
+      .panel {
+        padding: 17px;
+      }
+
+      .admin-event-top {
+        flex-direction: column;
+      }
+
+      .event-actions {
+        width: 100%;
+      }
+
+      .edit-btn,
+      .delete-btn {
+        flex: 1;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       ADMIN LOGIN
+  ========================== -->
+
+  <section id="loginPage">
+
+    <div class="login-box">
+
+      <h1>Admin</h1>
+
+      <p>Sign in to manage events</p>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label for="loginEmail">
+            Email
+          </label>
+
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Admin email"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="loginPassword">
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="primary-btn"
+        >
+          Login
+        </button>
+
+
+        <div id="loginMessage"></div>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       ADMIN APPLICATION
+  ========================== -->
+
+  <section id="adminApp" class="hidden">
+
+    <header>
+
+      <div class="header-inner">
+
+        <div class="brand">
+          Event <span>Admin</span>
+        </div>
+
+        <div class="header-actions">
+
+          <button
+            class="view-btn"
+            onclick="openUserSite()"
+          >
+            View Website
+          </button>
+
+          <button
+            class="logout-btn"
+            id="logoutBtn"
+          >
+            Logout
+          </button>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <main>
+
+      <div class="page-title">
+
+        <h2>Event Management</h2>
+
+        <p>
+          Add and manage events displayed on the website.
+        </p>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+
+        <!-- =====================
+             ADD / EDIT EVENT
+        ====================== -->
+
+        <div class="panel">
+
+          <h3 id="formTitle">
+            Add Event
+          </h3>
+
+          <form id="eventForm">
+
+            <div class="form-group">
+
+              <label for="eventTitle">
+                Event Name *
+              </label>
+
+              <input
+                type="text"
+                id="eventTitle"
+                placeholder="Enter event name"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="eventDescription">
+                Description
+              </label>
+
+              <textarea
+                id="eventDescription"
+                placeholder="Enter event description"
+              ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="eventDate">
+                Date *
+              </label>
+
+              <input
+                type="date"
+                id="eventDate"
+                required
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="eventTime">
+                Time
+              </label>
+
+              <input
+                type="time"
+                id="eventTime"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="eventLocation">
+                Location
+              </label>
+
+              <input
+                type="text"
+                id="eventLocation"
+                placeholder="Enter location"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="registrationLink">
+                Registration Link
+              </label>
+
+              <input
+                type="url"
+                id="registrationLink"
+                placeholder="https://example.com/register"
+              >
+
+            </div>
+
+
+            <div class="checkbox-group">
+
+              <input
+                type="checkbox"
+                id="isCommon"
+              >
+
+              <label for="isCommon">
+                Mark as Common Event
+              </label>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+              <button
+                type="submit"
+                class="save-btn"
+              >
+                <span id="saveButtonText">
+                  Add Event
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="cancel-btn hidden"
+                id="cancelEditBtn"
+              >
+                Cancel
+              </button>
+
+            </div>
+
+
+            <div
+              id="formMessage"
+              class="form-message"
+            ></div>
+
+          </form>
+
+        </div>
+
+
+        <!-- =====================
+             EVENT LIST
+        ====================== -->
+
+        <div class="panel">
+
+          <h3>
+            Posted Events
+          </h3>
+
+          <div
+            id="eventsList"
+            class="events-list"
+          ></div>
+
+        </div>
+
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+  <script>
+
+    /* =========================
+       SUPABASE
+    ========================== */
+
+    const SUPABASE_URL =
+      "https://wuxluaekflqvvhtghrok.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_5lGI_aAjnq3uQKXBEPqUvA_yf6_eFKL";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /* =========================
+       VARIABLES
+    ========================== */
+
+    let events = [];
+
+    let editingEventId = null;
+
+
+    /* =========================
+       ELEMENTS
+    ========================== */
+
+    const loginPage =
+      document.getElementById("loginPage");
+
+    const adminApp =
+      document.getElementById("adminApp");
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginMessage =
+      document.getElementById("loginMessage");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const eventForm =
+      document.getElementById("eventForm");
+
+    const eventsList =
+      document.getElementById("eventsList");
+
+    const formTitle =
+      document.getElementById("formTitle");
+
+    const saveButtonText =
+      document.getElementById("saveButtonText");
+
+    const cancelEditBtn =
+      document.getElementById("cancelEditBtn");
+
+    const formMessage =
+      document.getElementById("formMessage");
+
+
+    /* =========================
+       LOGIN
+    ========================== */
+
+    loginForm.addEventListener(
+      "submit",
+      async function(e) {
+
+        e.preventDefault();
+
+        loginMessage.textContent = "";
+
+        const email =
+          document
+            .getElementById("loginEmail")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("loginPassword")
+            .value;
+
+
+        const { error } =
+          await supabaseClient.auth
+            .signInWithPassword({
+              email,
+              password
+            });
+
+
+        if (error) {
+
+          console.error(error);
+
+          loginMessage.textContent =
+            "Invalid email or password.";
+
+          return;
+        }
+
+
+        loginForm.reset();
+
+        showAdmin();
+
+      }
+    );
+
+
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    logoutBtn.addEventListener(
+      "click",
+      async function() {
+
+        await supabaseClient.auth.signOut();
+
+        showLogin();
+
+      }
+    );
+
+
+    /* =========================
+       AUTH STATE
+    ========================== */
+
+    supabaseClient.auth.onAuthStateChange(
+      function(event, session) {
+
+        if (session) {
+
+          showAdmin();
+
+        } else {
+
+          showLogin();
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       SHOW LOGIN
+    ========================== */
+
+    function showLogin() {
+
+      loginPage.classList.remove(
+        "hidden"
+      );
+
+      adminApp.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /* =========================
+       SHOW ADMIN
+    ========================== */
+
+    async function showAdmin() {
+
+      loginPage.classList.add(
+        "hidden"
+      );
+
+      adminApp.classList.remove(
+        "hidden"
+      );
+
+      await loadEvents();
+
+    }
+
+
+    /* =========================
+       LOAD EVENTS
+    ========================== */
+
+    async function loadEvents() {
+
+      eventsList.innerHTML =
+        '<div class="no-events">Loading events...</div>';
+
+
+      const { data, error } =
+        await supabaseClient
+          .from("events")
+          .select("*")
+          .order("event_date", {
+            ascending: true
+          })
+          .order("event_time", {
+            ascending: true
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        eventsList.innerHTML =
+          '<div class="no-events">Unable to load events.</div>';
+
+        return;
+      }
+
+
+      events = data || [];
+
+      renderEvents();
+
+    }
+
+
+    /* =========================
+       RENDER EVENTS
+    ========================== */
+
+    function renderEvents() {
+
+      if (!events.length) {
+
+        eventsList.innerHTML =
+          '<div class="no-events">No events posted yet.</div>';
+
+        return;
+      }
+
+
+      eventsList.innerHTML = "";
+
+
+      events.forEach(function(event) {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "admin-event";
+
+
+        const commonLabel =
+          event.is_common
+            ? '<span class="common-label">COMMON EVENT</span>'
+            : "";
+
+
+        const date =
+          formatDate(event.event_date);
+
+
+        const time =
+          event.event_time
+            ? formatTime(event.event_time)
+            : "";
+
+
+        item.innerHTML = `
+
+          <div class="admin-event-top">
+
+            <div>
+
+              ${commonLabel}
+
+              <h4>
+                ${escapeHTML(event.title)}
+              </h4>
+
+              <div class="admin-event-info">
+
+                <div>
+                  <strong>Date:</strong>
+                  ${date}
+                </div>
+
+                ${
+                  time
+                    ? `
+                      <div>
+                        <strong>Time:</strong>
+                        ${escapeHTML(time)}
+                      </div>
+                    `
+                    : ""
+                }
+
+                ${
+                  event.location
+                    ? `
+                      <div>
+                        <strong>Location:</strong>
+                        ${escapeHTML(
+                          event.location
+                        )}
+                      </div>
+                    `
+                    : ""
+                }
+
+                ${
+                  event.registration_link
+                    ? `
+                      <div>
+                        Registration link added
+                      </div>
+                    `
+                    : ""
+                }
+
+              </div>
+
+            </div>
+
+
+            <div class="event-actions">
+
+              <button
+                class="edit-btn"
+                onclick="editEvent(${event.id})"
+              >
+                Edit
+              </button>
+
+              <button
+                class="delete-btn"
+                onclick="deleteEvent(${event.id})"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        eventsList.appendChild(item);
+
+      });
+
+    }
+
+
+    /* =========================
+       ADD / UPDATE EVENT
+    ========================== */
+
+    eventForm.addEventListener(
+      "submit",
+      async function(e) {
+
+        e.preventDefault();
+
+        formMessage.textContent = "";
+        formMessage.className =
+          "form-message";
+
+
+        const title =
+          document
+            .getElementById("eventTitle")
+            .value
+            .trim();
+
+
+        const description =
+          document
+            .getElementById("eventDescription")
+            .value
+            .trim();
+
+
+        const eventDate =
+          document
+            .getElementById("eventDate")
+            .value;
+
+
+        const eventTime =
+          document
+            .getElementById("eventTime")
+            .value;
+
+
+        const location =
+          document
+            .getElementById("eventLocation")
+            .value
+            .trim();
+
+
+        const registrationLink =
+          document
+            .getElementById("registrationLink")
+            .value
+            .trim();
+
+
+        const isCommon =
+          document
+            .getElementById("isCommon")
+            .checked;
+
+
+        const eventData = {
+
+          title: title,
+
+          description:
+            description || null,
+
+          event_date:
+            eventDate,
+
+          event_time:
+            eventTime || null,
+
+          location:
+            location || null,
+
+          registration_link:
+            registrationLink || null,
+
+          is_common:
+            isCommon
+
+        };
+
+
+        let result;
+
+
+        /* UPDATE */
+
+        if (editingEventId !== null) {
+
+          result =
+            await supabaseClient
+              .from("events")
+              .update(eventData)
+              .eq("id", editingEventId);
+
+        }
+
+        /* INSERT */
+
+        else {
+
+          result =
+            await supabaseClient
+              .from("events")
+              .insert([eventData]);
+
+        }
+
+
+        if (result.error) {
+
+          console.error(result.error);
+
+          formMessage.textContent =
+            "Unable to save event.";
+
+          formMessage.classList.add(
+            "error"
+          );
+
+          return;
+        }
+
+
+        formMessage.textContent =
+          editingEventId !== null
+            ? "Event updated successfully."
+            : "Event added successfully.";
+
+
+        formMessage.classList.add(
+          "success"
+        );
+
+
+        resetForm();
+
+        await loadEvents();
+
+      }
+    );
+
+
+    /* =========================
+       EDIT EVENT
+    ========================== */
+
+    window.editEvent =
+      function(id) {
+
+        const event =
+          events.find(function(item) {
+            return item.id === id;
+          });
+
+
+        if (!event) {
+          return;
+        }
+
+
+        editingEventId =
+          event.id;
+
+
+        document
+          .getElementById("eventTitle")
+          .value =
+          event.title || "";
+
+
+        document
+          .getElementById("eventDescription")
+          .value =
+          event.description || "";
+
+
+        document
+          .getElementById("eventDate")
+          .value =
+          event.event_date || "";
+
+
+        document
+          .getElementById("eventTime")
+          .value =
+          event.event_time
+            ? event.event_time.substring(0, 5)
+            : "";
+
+
+        document
+          .getElementById("eventLocation")
+          .value =
+          event.location || "";
+
+
+        document
+          .getElementById("registrationLink")
+          .value =
+          event.registration_link || "";
+
+
+        document
+          .getElementById("isCommon")
+          .checked =
+          event.is_common === true;
+
+
+        formTitle.textContent =
+          "Edit Event";
+
+
+        saveButtonText.textContent =
+          "Update Event";
+
+
+        cancelEditBtn.classList.remove(
+          "hidden"
+        );
+
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      };
+
+
+    /* =========================
+       DELETE EVENT
+    ========================== */
+
+    window.deleteEvent =
+      async function(id) {
+
+        const event =
+          events.find(function(item) {
+            return item.id === id;
+          });
+
+
+        if (!event) {
+          return;
+        }
+
+
+        const confirmed =
+          confirm(
+            `Delete "${event.title}"?`
+          );
+
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        const { error } =
+          await supabaseClient
+            .from("events")
+            .delete()
+            .eq("id", id);
+
+
+        if (error) {
+
+          console.error(error);
+
+          alert(
+            "Unable to delete event."
+          );
+
+          return;
+        }
+
+
+        if (editingEventId === id) {
+          resetForm();
+        }
+
+
+        await loadEvents();
+
+      };
+
+
+    /* =========================
+       CANCEL EDIT
+    ========================== */
+
+    cancelEditBtn.addEventListener(
+      "click",
+      function() {
+
+        resetForm();
+
+      }
+    );
+
+
+    /* =========================
+       RESET FORM
+    ========================== */
+
+    function resetForm() {
+
+      editingEventId = null;
+
+      eventForm.reset();
+
+      formTitle.textContent =
+        "Add Event";
+
+      saveButtonText.textContent =
+        "Add Event";
+
+      cancelEditBtn.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /* =========================
+       OPEN USER WEBSITE
+    ========================== */
+
+    function openUserSite() {
+
+      const currentURL =
+        window.location.origin +
+        window.location.pathname
+          .replace(
+            "admin.html",
+            "index.html"
+          );
+
+      window.open(
+        currentURL,
+        "_blank"
+      );
+
+    }
+
+
+    /* =========================
+       DATE HELPERS
+    ========================== */
+
+    function formatDate(dateString) {
+
+      const date =
+        new Date(
+          dateString + "T00:00:00"
+        );
+
+
+      return date.toLocaleDateString(
+        undefined,
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    function formatTime(timeString) {
+
+      const parts =
+        timeString.split(":");
+
+
+      const date =
+        new Date();
+
+
+      date.setHours(
+        Number(parts[0]),
+        Number(parts[1]),
+        0
+      );
+
+
+      return date.toLocaleTimeString(
+        undefined,
+        {
+          hour: "numeric",
+          minute: "2-digit"
+        }
+      );
+
+    }
+
+
+    /* =========================
+       SECURITY
+    ========================== */
+
+    function escapeHTML(value) {
+
+      if (
+        value === null ||
+        value === undefined
+      ) {
+        return "";
+      }
+
+
+      return String(value)
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =========================
+       INITIAL SESSION
+    ========================== */
+
+    async function initialize() {
+
+      const {
+        data: {
+          session
+        }
+      } =
+        await supabaseClient
+          .auth
+          .getSession();
+
+
+      if (session) {
+
+        showAdmin();
+
+      } else {
+
+        showLogin();
+
+      }
+
+    }
+
+
+    initialize();
+
+  </script>
+
+</body>
+</html>
