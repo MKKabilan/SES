@@ -312,7 +312,7 @@
 
     .events-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -547,6 +547,7 @@
     }
 
     .calendar-day {
+      height: 58px;
       min-height: 58px;
       padding: 6px;
       border-right: 1px solid #eef1f5;
@@ -590,21 +591,19 @@
     }
 
     .event-dot {
-      margin-top: 4px;
-      padding: 3px 4px;
-      border-radius: 5px;
-      background: var(--accent-soft);
-      color: #4338ca;
-      font-size: 8px;
-      font-weight: 700;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      width: 6px;
+      height: 6px;
+      padding: 0;
+      margin: 5px auto 0;
+      border-radius: 50%;
+      background: var(--accent);
+      display: block;
+      font-size: 0;
+      line-height: 0;
     }
 
     .common-dot {
-      background: var(--warning-soft);
-      color: var(--warning);
+      background: var(--warning);
     }
 
     .selected-date-events {
@@ -792,6 +791,19 @@
        RESPONSIVE
     ========================================== */
 
+    @media (min-width: 1450px) {
+
+      .events-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .event-poster {
+        height: 205px;
+      }
+
+    }
+
+
     @media (max-width: 1050px) {
 
       .dashboard-layout {
@@ -800,11 +812,11 @@
       }
 
       .events-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .event-poster {
-        height: 250px;
+        height: 220px;
       }
 
     }
@@ -832,6 +844,33 @@
 
       .event-poster {
         height: 210px;
+      }
+
+    }
+
+
+    @media (max-width: 520px) {
+
+      .events-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .event-poster {
+        height: 150px;
+      }
+
+      .event-content {
+        padding: 13px;
+      }
+
+      .event-card h3 {
+        font-size: 15px;
+      }
+
+      .event-info div,
+      .event-description {
+        font-size: 12px;
       }
 
     }
@@ -874,8 +913,8 @@
       }
 
       .events-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
       }
 
       .event-poster {
@@ -891,6 +930,7 @@
       }
 
       .calendar-day {
+        height: 52px;
         min-height: 52px;
         padding: 5px;
       }
@@ -955,12 +995,37 @@
       }
 
       .calendar-day {
+        height: 48px;
         min-height: 48px;
         padding: 4px;
       }
 
       .event-dot {
-        display: none;
+        width: 5px;
+        height: 5px;
+        display: block;
+      }
+
+      .events-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .event-poster {
+        height: 125px;
+      }
+
+      .event-content {
+        padding: 10px;
+      }
+
+      .event-card h3 {
+        font-size: 14px;
+      }
+
+      .event-info div,
+      .event-description {
+        font-size: 11px;
       }
 
     }
