@@ -1562,28 +1562,8 @@
       }
 
 
-      const allEvents =
-        data || [];
-
-
-      const now =
-        new Date();
-
-      const today =
-        createDateString(
-          now.getFullYear(),
-          now.getMonth() + 1,
-          now.getDate()
-        );
-
-
       events =
-        allEvents
-          .filter(
-            function(event) {
-              return event.event_date >= today;
-            }
-          )
+        (data || [])
           .sort(
             function(a, b) {
 
