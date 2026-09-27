@@ -1562,8 +1562,49 @@
       }
 
 
-      events =
+      const allEvents =
         data || [];
+
+
+      const now =
+        new Date();
+
+      const today =
+        createDateString(
+          now.getFullYear(),
+          now.getMonth() + 1,
+          now.getDate()
+        );
+
+
+      events =
+        allEvents
+          .filter(
+            function(event) {
+              return event.event_date >= today;
+            }
+          )
+          .sort(
+            function(a, b) {
+
+              const dateCompare =
+                a.event_date.localeCompare(
+                  b.event_date
+                );
+
+              if (dateCompare !== 0) {
+                return dateCompare;
+              }
+
+              return (
+                (a.event_time || "23:59:59")
+                  .localeCompare(
+                    b.event_time || "23:59:59"
+                  )
+              );
+
+            }
+          );
 
 
       renderEvents();
