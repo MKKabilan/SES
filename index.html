@@ -515,18 +515,31 @@
 
 
     .event-description {
-
       color: #4b5563;
-
-      line-height: 1.6;
-
+      line-height: 1.5;
       font-size: 14px;
-
-      margin-bottom: 18px;
-
-      white-space: pre-line;
-
+      margin-bottom: 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
+    .event-view-more {
+      display: inline-block;
+      border: none;
+      background: none;
+      padding: 0;
+      margin-bottom: 16px;
+      color: #2563eb;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .event-view-more:hover {
+      text-decoration: underline;
+    }
+
 
 
     .register-btn {
@@ -1761,13 +1774,19 @@
               ${
                 event.description
                   ? `
-                    <div class="event-description">
-
-                      ${escapeHTML(
-                        event.description
-                      )}
-
+                    <div
+                      class="event-description"
+                      title="${escapeAttribute(event.description)}"
+                    >
+                      ${escapeHTML(event.description)}
                     </div>
+
+                    <button
+                      type="button"
+                      class="event-view-more"
+                    >
+                      View more
+                    </button>
                   `
                   : ""
               }
@@ -1796,6 +1815,20 @@
               "click",
               function(e) {
                 e.stopPropagation();
+              }
+            );
+          }
+
+
+          const viewMore =
+            card.querySelector(".event-view-more");
+
+          if (viewMore) {
+            viewMore.addEventListener(
+              "click",
+              function(e) {
+                e.stopPropagation();
+                openEventModal(event);
               }
             );
           }
@@ -2237,13 +2270,19 @@
               ${
                 event.description
                   ? `
-                    <div class="event-description">
-
-                      ${escapeHTML(
-                        event.description
-                      )}
-
+                    <div
+                      class="event-description"
+                      title="${escapeAttribute(event.description)}"
+                    >
+                      ${escapeHTML(event.description)}
                     </div>
+
+                    <button
+                      type="button"
+                      class="event-view-more"
+                    >
+                      View more
+                    </button>
                   `
                   : ""
               }
@@ -2272,6 +2311,20 @@
               "click",
               function(e) {
                 e.stopPropagation();
+              }
+            );
+          }
+
+
+          const viewMore =
+            card.querySelector(".event-view-more");
+
+          if (viewMore) {
+            viewMore.addEventListener(
+              "click",
+              function(e) {
+                e.stopPropagation();
+                openEventModal(event);
               }
             );
           }
