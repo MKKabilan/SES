@@ -450,55 +450,261 @@
 
 
     /* =========================================
-       TOP CALENDAR BUTTON + POPUP
+       DASHBOARD LAYOUT + CALENDAR
     ========================================== */
 
-    .header-actions { display:flex; align-items:center; gap:9px; }
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start;
+    }
 
-    .calendar-open-btn { width:40px; height:40px; border:1px solid #d1d5db; background:white; color:#1f2937; border-radius:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; }
-    .calendar-open-btn:hover { background:#f3f4f6; }
+    .events-area {
+      min-width: 0;
+    }
 
-    .calendar-overlay { position:fixed; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:flex-start; justify-content:flex-end; padding:75px 24px 24px; z-index:100; }
-    .calendar-modal { width:390px; max-width:100%; max-height:calc(100vh - 100px); overflow-y:auto; background:white; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 15px 40px rgba(0,0,0,.16); }
-    .calendar-modal-header { display:flex; align-items:center; justify-content:space-between; padding:15px 16px; border-bottom:1px solid #e5e7eb; }
-    .calendar-modal-header h3 { font-size:17px; }
-    .calendar-close-btn { width:32px; height:32px; border:none; background:#f3f4f6; border-radius:7px; cursor:pointer; font-size:18px; }
-    .calendar-close-btn:hover { background:#e5e7eb; }
-    .calendar { background:white; }
-    .calendar-header { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #e5e7eb; }
-    .calendar-header h3 { font-size:16px; }
-    .calendar-nav { display:flex; gap:5px; }
-    .calendar-nav button { border:1px solid #d1d5db; background:white; padding:5px 8px; border-radius:6px; cursor:pointer; font-size:12px; }
-    .calendar-nav button:hover { background:#f3f4f6; }
-    .calendar-weekdays, .calendar-days { display:grid; grid-template-columns:repeat(7,1fr); }
-    .calendar-weekdays div { padding:9px 3px; text-align:center; font-size:11px; font-weight:600; color:#6b7280; border-bottom:1px solid #e5e7eb; }
-    .calendar-day { min-height:54px; padding:6px; border-right:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb; cursor:pointer; position:relative; }
-    .calendar-day:nth-child(7n) { border-right:none; }
-    .calendar-day:hover { background:#f9fafb; }
-    .calendar-day.empty { background:#fafafa; cursor:default; }
-    .day-number { font-size:12px; font-weight:600; }
-    .event-dot { margin-top:4px; padding:2px 4px; border-radius:4px; background:#dbeafe; color:#1e40af; font-size:9px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-    .common-dot { background:#fef3c7; color:#92400e; }
-    .selected-date-events { padding:14px 16px 16px; }
-    .selected-date-events h3 { margin-bottom:10px; font-size:15px; }
-    .selected-date-events .events-grid { grid-template-columns:1fr; gap:12px; }
-    .selected-date-events .event-poster { height:150px; }
-    .selected-date-events .event-content { padding:14px; }
-    .selected-date-events .event-card h3 { font-size:17px; }
-    .calendar-event-count { padding:10px 16px; color:#6b7280; font-size:12px; border-bottom:1px solid #e5e7eb; }
+    .calendar-sidebar {
+      min-width: 0;
+    }
 
+    .calendar-panel {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .calendar-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .calendar-panel-title span {
+      font-size: 17px;
+    }
+
+    .calendar {
+      background: white;
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .calendar-header h3 {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    .calendar-nav button {
+      min-width: 32px;
+      min-height: 32px;
+      border: 1px solid #d1d5db;
+      background: white;
+      padding: 4px 7px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .calendar-nav button:hover {
+      background: #f3f4f6;
+    }
+
+    .calendar-weekdays,
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .calendar-weekdays div {
+      padding: 9px 2px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: #6b7280;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .calendar-day {
+      min-height: 52px;
+      padding: 6px 5px;
+      border-right: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      position: relative;
+      min-width: 0;
+    }
+
+    .calendar-day:nth-child(7n) {
+      border-right: none;
+    }
+
+    .calendar-day:hover {
+      background: #f9fafb;
+    }
+
+    .calendar-day.empty {
+      background: #fafafa;
+      cursor: default;
+    }
+
+    .calendar-day.today {
+      background: #eff6ff;
+    }
+
+    .calendar-day.selected {
+      box-shadow: inset 0 0 0 2px #2563eb;
+      background: #f8fbff;
+    }
+
+    .day-number {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .event-dot {
+      margin-top: 4px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 9px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .common-dot {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .selected-date-events {
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .selected-date-events h3 {
+      margin: 0;
+      padding: 13px 16px 5px;
+      font-size: 14px;
+    }
+
+    .calendar-event-count {
+      padding: 4px 16px 10px;
+      color: #6b7280;
+      font-size: 11px;
+    }
+
+    .selected-date-events .events-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .selected-date-events .event-card {
+      border: none;
+      border-top: 1px solid #f0f1f3;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .selected-date-events .event-poster {
+      height: 120px;
+    }
+
+    .selected-date-events .event-content {
+      padding: 13px 16px 15px;
+    }
+
+    .selected-date-events .event-card h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .selected-date-events .event-info {
+      margin-bottom: 8px;
+    }
+
+    .selected-date-events .event-info div {
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .selected-date-events .event-description {
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .selected-date-events .register-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
 
     /* =========================================
        RESPONSIVE
-    ========================================= */
+    ========================================== */
 
-    @media (max-width: 900px) {
+    @media (max-width: 1050px) {
+
+      .dashboard-layout {
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 16px;
+      }
 
       .events-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-        grid-template-columns:
-          repeat(2, 1fr);
+      .calendar-day {
+        min-height: 48px;
+        padding: 5px 4px;
+      }
 
+      .event-dot {
+        font-size: 8px;
+      }
+
+    }
+
+
+    @media (max-width: 780px) {
+
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-sidebar {
+        order: -1;
+      }
+
+      .calendar-panel {
+        width: 100%;
+      }
+
+      .calendar-day {
+        min-height: 54px;
+      }
+
+      .event-dot {
+        font-size: 9px;
       }
 
     }
@@ -507,47 +713,88 @@
     @media (max-width: 600px) {
 
       .header-inner {
-
         padding: 13px 15px;
-
       }
-
 
       main {
-
-        padding: 22px 15px 40px;
-
+        padding: 18px 12px 35px;
       }
 
+      .page-title {
+        margin-bottom: 18px;
+      }
 
       .page-title h2 {
-
-        font-size: 24px;
-
+        font-size: 23px;
       }
 
+      .page-title p {
+        font-size: 13px;
+      }
 
       .events-grid {
-
         grid-template-columns: 1fr;
-
+        gap: 14px;
       }
-
 
       .event-poster {
-
         height: 200px;
-
       }
 
+      .calendar-panel-title {
+        padding: 13px 14px;
+      }
 
-      .header-actions { gap: 6px; }
-      .calendar-open-btn { width: 38px; height: 38px; }
-      .calendar-overlay { padding: 65px 10px 10px; align-items: flex-start; justify-content: center; }
-      .calendar-modal { width: 100%; max-height: calc(100vh - 80px); }
-      .calendar-day { min-height: 50px; padding: 5px; }
-      .event-dot { font-size: 8px; }
-      .calendar-weekdays div { font-size: 9px; }
+      .calendar-header {
+        padding: 10px 12px;
+      }
+
+      .calendar-header h3 {
+        font-size: 14px;
+      }
+
+      .calendar-weekdays div {
+        font-size: 9px;
+        padding: 8px 1px;
+      }
+
+      .calendar-day {
+        min-height: 48px;
+        padding: 5px 3px;
+      }
+
+      .day-number {
+        font-size: 11px;
+      }
+
+      .event-dot {
+        font-size: 7px;
+        padding: 2px 3px;
+      }
+
+      .calendar-nav button {
+        min-width: 30px;
+        min-height: 30px;
+      }
+
+    }
+
+
+    @media (max-width: 360px) {
+
+      main {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .calendar-day {
+        min-height: 44px;
+        padding: 4px 2px;
+      }
+
+      .event-dot {
+        display: none;
+      }
 
     }
 
@@ -649,26 +896,12 @@
         </div>
 
 
-        <div class="header-actions">
-
-          <button
-            class="calendar-open-btn"
-            id="calendarOpenBtn"
-            type="button"
-            title="Event Calendar"
-            aria-label="Open event calendar"
-          >
-            📅
-          </button>
-
-          <button
-            class="logout-btn"
-            id="logoutBtn"
-          >
-            Logout
-          </button>
-
-        </div>
+        <button
+          class="logout-btn"
+          id="logoutBtn"
+        >
+          Logout
+        </button>
 
       </div>
 
@@ -680,61 +913,75 @@
 
     <main>
 
+      <div class="dashboard-layout">
 
-      <div class="page-title">
+        <section class="events-area">
 
-        <h2>
-          Upcoming Events
-        </h2>
+          <div class="page-title">
+            <h2>Upcoming Events</h2>
+            <p>View upcoming events and registration details.</p>
+          </div>
 
-        <p>
-          View upcoming events and registration details.
-        </p>
+          <div
+            id="eventsContainer"
+            class="events-grid"
+          ></div>
+
+        </section>
+
+        <aside class="calendar-sidebar">
+
+          <div class="calendar-panel">
+
+            <div class="calendar-panel-title">
+              <span>▣</span>
+              Event Calendar
+            </div>
+
+            <div class="calendar">
+
+              <div class="calendar-header">
+                <h3 id="calendarMonth"></h3>
+
+                <div class="calendar-nav">
+                  <button id="previousMonth" type="button" aria-label="Previous month">‹</button>
+                  <button id="todayBtn" type="button">Today</button>
+                  <button id="nextMonth" type="button" aria-label="Next month">›</button>
+                </div>
+              </div>
+
+              <div class="calendar-weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+              </div>
+
+              <div
+                id="calendarDays"
+                class="calendar-days"
+              ></div>
+
+            </div>
+
+            <div
+              id="selectedDateEvents"
+              class="selected-date-events"
+            ></div>
+
+          </div>
+
+        </aside>
 
       </div>
-
-
-      <!-- EVENTS -->
-
-      <div
-        id="eventsContainer"
-        class="events-grid"
-      ></div>
-
-
-
 
     </main>
 
   </section>
 
-
-
-  <!-- =========================================
-       CALENDAR POPUP
-  ========================================== -->
-
-  <div id="calendarOverlay" class="calendar-overlay hidden" role="dialog" aria-modal="true" aria-label="Event calendar">
-    <div class="calendar-modal">
-      <div class="calendar-modal-header">
-        <h3>Event Calendar</h3>
-        <button id="calendarCloseBtn" class="calendar-close-btn" type="button" aria-label="Close calendar">×</button>
-      </div>
-      <div class="calendar">
-        <div class="calendar-header">
-          <h3 id="calendarMonth"></h3>
-          <div class="calendar-nav">
-            <button id="previousMonth" type="button">‹</button>
-            <button id="todayBtn" type="button">Today</button>
-            <button id="nextMonth" type="button">›</button>
-          </div>
-        </div>
-        <div class="calendar-weekdays"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
-        <div id="calendarDays" class="calendar-days"></div>
-      </div>
-      <div id="selectedDateEvents" class="selected-date-events"></div>
-    </div>
-  </div>
 
 
   <!-- =========================================
@@ -772,6 +1019,9 @@
 
     let calendarDate =
       new Date();
+
+    let selectedCalendarDate =
+      null;
 
 
 
@@ -812,24 +1062,6 @@
     const logoutBtn =
       document.getElementById(
         "logoutBtn"
-      );
-
-
-    const calendarOpenBtn =
-      document.getElementById(
-        "calendarOpenBtn"
-      );
-
-
-    const calendarOverlay =
-      document.getElementById(
-        "calendarOverlay"
-      );
-
-
-    const calendarCloseBtn =
-      document.getElementById(
-        "calendarCloseBtn"
       );
 
 
@@ -1061,7 +1293,29 @@
       renderEvents();
 
 
-      renderCalendar();
+      if (events.length) {
+        const todayString = createDateString(
+          new Date().getFullYear(),
+          new Date().getMonth() + 1,
+          new Date().getDate()
+        );
+
+        const firstDate =
+          events.find(event => event.event_date >= todayString)?.event_date ||
+          events[0].event_date;
+
+        selectedCalendarDate = firstDate;
+        calendarDate = new Date(firstDate + "T00:00:00");
+        renderCalendar();
+        showDateEvents(firstDate);
+      } else {
+        renderCalendar();
+        showDateEvents(createDateString(
+          calendarDate.getFullYear(),
+          calendarDate.getMonth() + 1,
+          calendarDate.getDate()
+        ));
+      }
 
     }
 
@@ -1394,6 +1648,22 @@
           );
 
 
+        const today = new Date();
+        const todayString = createDateString(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          today.getDate()
+        );
+
+        if (dateString === todayString) {
+          cell.classList.add("today");
+        }
+
+        if (dateString === selectedCalendarDate) {
+          cell.classList.add("selected");
+        }
+
+
         const dayEvents =
           events.filter(
             function(event) {
@@ -1449,6 +1719,11 @@
         cell.addEventListener(
           "click",
           function() {
+
+            selectedCalendarDate =
+              dateString;
+
+            renderCalendar();
 
             showDateEvents(
               dateString
@@ -1711,32 +1986,6 @@
 
     }
 
-
-
-    /* =========================================
-       CALENDAR POPUP
-    ========================================== */
-
-    calendarOpenBtn.addEventListener("click", function() {
-      calendarOverlay.classList.remove("hidden");
-      renderCalendar();
-    });
-
-    calendarCloseBtn.addEventListener("click", function() {
-      calendarOverlay.classList.add("hidden");
-    });
-
-    calendarOverlay.addEventListener("click", function(e) {
-      if (e.target === calendarOverlay) {
-        calendarOverlay.classList.add("hidden");
-      }
-    });
-
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") {
-        calendarOverlay.classList.add("hidden");
-      }
-    });
 
 
     /* =========================================
