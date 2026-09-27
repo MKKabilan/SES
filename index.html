@@ -17,20 +17,21 @@
 
   
   
+
 <style>
   :root {
-    --bg: #16071f;
-    --text: #ffffff;
-    --muted: rgba(255,255,255,0.72);
-    --glass: rgba(255,255,255,0.13);
-    --glass-strong: rgba(255,255,255,0.19);
-    --glass-border: rgba(255,255,255,0.25);
+    --bg: #ffffff;
+    --text: #182033;
+    --muted: #667085;
+    --border: rgba(104, 77, 170, 0.12);
+    --glass: rgba(255,255,255,0.72);
+    --glass-border: rgba(255,255,255,0.9);
     --pink: #ff006e;
     --magenta: #c00080;
     --purple: #6a00a8;
     --orange: #ff4b00;
     --yellow: #ffc400;
-    --shadow: 0 18px 55px rgba(20, 0, 35, 0.28);
+    --shadow: 0 14px 38px rgba(67, 35, 100, 0.08);
     --radius: 20px;
   }
 
@@ -58,30 +59,26 @@
     min-height: 100vh;
     background:
       radial-gradient(
-        circle at 5% 8%,
-        rgba(255, 77, 0, 0.95) 0,
-        rgba(255, 77, 0, 0.38) 22%,
-        transparent 42%
+        420px 320px at -5% -4%,
+        rgba(255, 75, 0, 0.18),
+        transparent 70%
       ),
       radial-gradient(
-        circle at 96% 12%,
-        rgba(255, 0, 110, 0.9) 0,
-        rgba(255, 0, 110, 0.38) 24%,
-        transparent 45%
+        460px 340px at 105% -3%,
+        rgba(255, 0, 110, 0.17),
+        transparent 70%
       ),
       radial-gradient(
-        circle at 82% 92%,
-        rgba(106, 0, 168, 0.95) 0,
-        rgba(106, 0, 168, 0.48) 25%,
-        transparent 48%
+        480px 380px at 104% 104%,
+        rgba(106, 0, 168, 0.16),
+        transparent 72%
       ),
-      linear-gradient(
-        135deg,
-        #ff4b00 0%,
-        #ed005f 34%,
-        #c00080 62%,
-        #5f00a8 100%
-      );
+      radial-gradient(
+        380px 300px at -6% 104%,
+        rgba(192, 0, 128, 0.10),
+        transparent 72%
+      ),
+      #ffffff;
     background-attachment: fixed;
     overflow-x: hidden;
   }
@@ -91,25 +88,25 @@
     content: "";
     position: fixed;
     z-index: -1;
-    border-radius: 50%;
-    filter: blur(55px);
     pointer-events: none;
+    border-radius: 50%;
+    filter: blur(70px);
   }
 
   body::before {
     width: 280px;
     height: 280px;
-    left: -80px;
-    top: 35%;
-    background: rgba(255, 122, 0, 0.38);
+    left: -150px;
+    top: 30%;
+    background: rgba(255, 75, 0, 0.09);
   }
 
   body::after {
-    width: 340px;
-    height: 340px;
-    right: -100px;
-    bottom: 5%;
-    background: rgba(111, 0, 180, 0.48);
+    width: 320px;
+    height: 320px;
+    right: -160px;
+    bottom: 8%;
+    background: rgba(106, 0, 168, 0.10);
   }
 
   button,
@@ -126,9 +123,7 @@
   }
 
 
-  /* =========================================
-     GLASS PRIMITIVES
-  ========================================== */
+  /* GLASS */
 
   header,
   .login-box,
@@ -138,17 +133,15 @@
   .selected-date-events,
   .event-modal,
   .event-modal-qr-note {
-    background: rgba(255,255,255,0.13);
-    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.68);
+    border: 1px solid rgba(255,255,255,0.92);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(22px) saturate(145%);
-    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    backdrop-filter: blur(18px) saturate(130%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%);
   }
 
 
-  /* =========================================
-     LOGIN
-  ========================================== */
+  /* LOGIN */
 
   #loginPage {
     min-height: 100vh;
@@ -164,6 +157,7 @@
     max-width: 420px;
     padding: 38px;
     border-radius: 28px;
+    box-shadow: 0 22px 65px rgba(75, 35, 110, 0.12);
   }
 
   .login-box h1 {
@@ -189,55 +183,41 @@
     margin-bottom: 7px;
     font-size: 13px;
     font-weight: 700;
-    color: rgba(255,255,255,0.9);
+    color: #344054;
   }
 
   .form-group input {
     width: 100%;
     padding: 13px 14px;
-    border: 1px solid rgba(255,255,255,0.28);
+    border: 1px solid #e2e5ec;
     border-radius: 12px;
     outline: none;
-    background: rgba(255,255,255,0.11);
-    color: white;
+    background: rgba(255,255,255,0.78);
+    color: var(--text);
     transition: 0.15s ease;
   }
 
-  .form-group input::placeholder {
-    color: rgba(255,255,255,0.55);
-  }
-
   .form-group input:focus {
-    border-color: rgba(255,255,255,0.65);
-    box-shadow:
-      0 0 0 4px rgba(255,255,255,0.09),
-      0 8px 24px rgba(255,0,110,0.16);
+    border-color: rgba(192,0,128,0.35);
+    box-shadow: 0 0 0 4px rgba(255,0,110,0.07);
   }
 
   .login-btn {
     width: 100%;
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.7);
     padding: 13px 16px;
     border-radius: 12px;
-    background:
-      linear-gradient(
-        135deg,
-        #ff4b00,
-        #ff006e 52%,
-        #8f00b8
-      );
+    background: linear-gradient(135deg,#ff4b00,#ff006e 52%,#7200aa);
     color: white;
     cursor: pointer;
     font-weight: 800;
-    box-shadow:
-      0 10px 26px rgba(255,0,110,0.28);
+    box-shadow: 0 10px 24px rgba(255,0,110,0.20);
     transition: 0.16s ease;
   }
 
   .login-btn:hover {
     transform: translateY(-2px);
-    box-shadow:
-      0 14px 32px rgba(255,0,110,0.36);
+    box-shadow: 0 14px 30px rgba(255,0,110,0.26);
   }
 
   #loginMessage {
@@ -245,13 +225,11 @@
     margin-top: 14px;
     text-align: center;
     font-size: 13px;
-    color: #ffe4ed;
+    color: #c0265c;
   }
 
 
-  /* =========================================
-     HEADER
-  ========================================== */
+  /* HEADER */
 
   header {
     position: sticky;
@@ -286,19 +264,12 @@
     display: grid;
     place-items: center;
     border-radius: 13px;
-    background:
-      linear-gradient(
-        135deg,
-        #ff4b00,
-        #ff006e 52%,
-        #7200aa
-      );
+    background: linear-gradient(135deg,#ff4b00,#ff006e 52%,#7200aa);
     color: white;
     font-size: 16px;
     font-weight: 900;
-    border: 1px solid rgba(255,255,255,0.35);
-    box-shadow:
-      0 8px 24px rgba(255,0,110,0.28);
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 8px 22px rgba(255,0,110,0.18);
   }
 
   .brand-copy {
@@ -316,13 +287,13 @@
     margin-top: 3px;
     font-size: 11px;
     font-weight: 500;
-    color: rgba(255,255,255,0.68);
+    color: #98a2b3;
   }
 
   .logout-btn {
-    border: 1px solid rgba(255,255,255,0.30);
-    background: rgba(255,255,255,0.10);
-    color: white;
+    border: 1px solid rgba(255,0,110,0.20);
+    background: rgba(255,255,255,0.72);
+    color: #c0265c;
     padding: 9px 14px;
     border-radius: 11px;
     cursor: pointer;
@@ -332,14 +303,12 @@
   }
 
   .logout-btn:hover {
-    background: rgba(255,255,255,0.20);
+    background: #fff4f8;
     transform: translateY(-1px);
   }
 
 
-  /* =========================================
-     MAIN
-  ========================================== */
+  /* MAIN */
 
   main {
     max-width: 1320px;
@@ -371,14 +340,12 @@
   }
 
   .page-title p {
-    color: rgba(255,255,255,0.74);
+    color: #667085;
     font-size: 14px;
   }
 
 
-  /* =========================================
-     EVENT CARDS
-  ========================================== */
+  /* EVENTS */
 
   .events-grid {
     display: grid;
@@ -394,13 +361,15 @@
     transition:
       transform 0.18s ease,
       background 0.18s ease,
-      border-color 0.18s ease;
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
   }
 
   .event-card:hover {
     transform: translateY(-5px);
-    background: rgba(255,255,255,0.18);
-    border-color: rgba(255,255,255,0.36);
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(192,0,128,0.14);
+    box-shadow: 0 20px 42px rgba(72, 32, 100, 0.11);
   }
 
   .event-poster {
@@ -408,7 +377,7 @@
     height: 230px;
     object-fit: cover;
     display: block;
-    background: rgba(0,0,0,0.12);
+    background: #f1f3f7;
   }
 
   .event-content {
@@ -418,9 +387,9 @@
   .common-badge {
     display: inline-flex;
     align-items: center;
-    background: rgba(255,196,0,0.17);
-    color: #fff1b8;
-    border: 1px solid rgba(255,196,0,0.32);
+    background: #fff8df;
+    color: #8a5700;
+    border: 1px solid #f7df91;
     padding: 5px 9px;
     border-radius: 999px;
     font-size: 11px;
@@ -442,17 +411,17 @@
   }
 
   .event-info div {
-    color: rgba(255,255,255,0.70);
+    color: #667085;
     font-size: 13px;
   }
 
   .event-info strong {
-    color: rgba(255,255,255,0.94);
+    color: #344054;
     font-weight: 750;
   }
 
   .event-description {
-    color: rgba(255,255,255,0.68);
+    color: #667085;
     line-height: 1.5;
     font-size: 13px;
     margin-bottom: 7px;
@@ -467,14 +436,14 @@
     background: none;
     padding: 0;
     margin-bottom: 15px;
-    color: #ffd6ea;
+    color: #c00080;
     font-size: 12px;
     font-weight: 800;
     cursor: pointer;
   }
 
   .event-view-more:hover {
-    color: white;
+    color: #ff006e;
     text-decoration: underline;
   }
 
@@ -482,29 +451,21 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background:
-      linear-gradient(
-        135deg,
-        #ff4b00,
-        #ff006e 55%,
-        #8300b3
-      );
+    background: linear-gradient(135deg,#ff4b00,#ff006e 55%,#8300b3);
     color: white;
     text-decoration: none;
     padding: 10px 15px;
     border-radius: 10px;
     font-size: 13px;
     font-weight: 800;
-    border: 1px solid rgba(255,255,255,0.24);
-    box-shadow:
-      0 8px 20px rgba(255,0,110,0.22);
+    border: 1px solid rgba(255,255,255,0.75);
+    box-shadow: 0 8px 20px rgba(255,0,110,0.18);
     transition: 0.15s ease;
   }
 
   .register-btn:hover {
     transform: translateY(-1px);
-    box-shadow:
-      0 12px 25px rgba(255,0,110,0.32);
+    box-shadow: 0 12px 25px rgba(255,0,110,0.25);
   }
 
   .no-events {
@@ -512,13 +473,11 @@
     padding: 40px 24px;
     text-align: center;
     border-radius: 20px;
-    color: rgba(255,255,255,0.72);
+    color: #667085;
   }
 
 
-  /* =========================================
-     CALENDAR
-  ========================================== */
+  /* CALENDAR */
 
   .calendar-sidebar {
     min-width: 0;
@@ -536,7 +495,7 @@
     align-items: center;
     gap: 11px;
     padding: 16px 17px;
-    border-bottom: 1px solid rgba(255,255,255,0.16);
+    border-bottom: 1px solid rgba(98,78,140,0.10);
     font-size: 14px;
     font-weight: 800;
   }
@@ -548,8 +507,8 @@
     place-items: center;
     flex: 0 0 32px;
     border-radius: 10px;
-    background: rgba(255,255,255,0.14);
-    color: white;
+    background: linear-gradient(135deg,#fff0f7,#f3edff);
+    color: #7b35c8;
   }
 
   .calendar {
@@ -562,7 +521,7 @@
     justify-content: space-between;
     gap: 8px;
     padding: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.14);
+    border-bottom: 1px solid rgba(98,78,140,0.10);
   }
 
   .calendar-header h3 {
@@ -576,9 +535,9 @@
   }
 
   .calendar-nav button {
-    border: 1px solid rgba(255,255,255,0.22);
-    background: rgba(255,255,255,0.09);
-    color: white;
+    border: 1px solid #e1e6ef;
+    background: rgba(255,255,255,0.72);
+    color: #475467;
     min-width: 32px;
     height: 32px;
     padding: 0 8px;
@@ -590,8 +549,9 @@
   }
 
   .calendar-nav button:hover {
-    background: rgba(255,255,255,0.19);
-    border-color: rgba(255,255,255,0.38);
+    background: #fff2f8;
+    border-color: rgba(255,0,110,0.18);
+    color: #c00080;
   }
 
   .calendar-weekdays,
@@ -605,24 +565,22 @@
     text-align: center;
     font-size: 9px;
     font-weight: 800;
-    color: rgba(255,255,255,0.56);
+    color: #98a2b3;
     text-transform: uppercase;
     letter-spacing: 0.45px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
+    border-bottom: 1px solid rgba(98,78,140,0.08);
   }
 
   .calendar-day {
     height: 58px;
     min-height: 58px;
     padding: 7px;
-    border-right: 1px solid rgba(255,255,255,0.11);
-    border-bottom: 1px solid rgba(255,255,255,0.11);
+    border-right: 1px solid rgba(98,78,140,0.08);
+    border-bottom: 1px solid rgba(98,78,140,0.08);
     cursor: pointer;
     position: relative;
-    background: rgba(255,255,255,0.025);
-    transition:
-      background 0.15s ease,
-      box-shadow 0.15s ease;
+    background: rgba(255,255,255,0.22);
+    transition: 0.15s ease;
   }
 
   .calendar-day:nth-child(7n) {
@@ -630,13 +588,12 @@
   }
 
   .calendar-day:hover {
-    background: rgba(255,255,255,0.10);
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.65);
+    box-shadow: inset 0 0 0 1px rgba(192,0,128,0.07);
   }
 
   .calendar-day.empty {
-    background: rgba(0,0,0,0.025);
+    background: rgba(248,249,252,0.35);
     cursor: default;
   }
 
@@ -648,36 +605,24 @@
     border-radius: 8px;
     font-size: 11px;
     font-weight: 800;
-    color: white;
+    color: #344054;
   }
 
   .calendar-day.today .day-number {
-    background:
-      linear-gradient(
-        135deg,
-        #ff4b00,
-        #ff006e
-      );
+    background: linear-gradient(135deg,#ff4b00,#ff006e);
     color: white;
-    box-shadow:
-      0 5px 14px rgba(255,0,110,0.30);
+    box-shadow: 0 5px 14px rgba(255,0,110,0.22);
   }
 
   .calendar-day.selected .day-number {
-    box-shadow:
-      inset 0 0 0 1.5px rgba(255,255,255,0.78);
-    color: white;
-    background: rgba(255,255,255,0.12);
+    box-shadow: inset 0 0 0 1.5px #c9a3dc;
+    color: #9b2e9e;
+    background: #fff8fc;
   }
 
   .calendar-day.today.selected .day-number {
     color: white;
-    background:
-      linear-gradient(
-        135deg,
-        #ff4b00,
-        #ff006e
-      );
+    background: linear-gradient(135deg,#ff4b00,#ff006e);
   }
 
   .event-dot {
@@ -686,12 +631,11 @@
     padding: 0;
     margin: 6px auto 0;
     border-radius: 50%;
-    background: #ffd6ea;
+    background: #c00080;
     display: block;
     font-size: 0;
     line-height: 0;
-    box-shadow:
-      0 0 8px rgba(255,214,234,0.48);
+    box-shadow: 0 0 8px rgba(192,0,128,0.24);
   }
 
   .event-dot.multiple {
@@ -700,7 +644,7 @@
     margin: 2px auto 0;
     border-radius: 0;
     background: transparent;
-    color: #ffd6ea;
+    color: #c00080;
     font-size: 13px;
     font-weight: 900;
     line-height: 16px;
@@ -724,20 +668,19 @@
   }
 
   .common-dot {
-    background: #ffd34d;
-    box-shadow:
-      0 0 8px rgba(255,211,77,0.35);
+    background: #d98200;
+    box-shadow: 0 0 8px rgba(217,130,0,0.20);
   }
 
   .event-dot.multiple.common-dot {
     background: transparent;
-    color: #ffd34d;
+    color: #d98200;
   }
 
   .selected-date-events {
-    border-top: 1px solid rgba(255,255,255,0.14);
+    border-top: 1px solid rgba(98,78,140,0.10);
     padding: 15px;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.35);
   }
 
   .selected-date-events h3 {
@@ -752,7 +695,7 @@
 
   .selected-date-events .event-card {
     box-shadow: none;
-    background: rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.58);
     border-radius: 13px;
   }
 
@@ -770,21 +713,19 @@
 
   .calendar-event-count {
     padding: 9px 0 10px;
-    color: rgba(255,255,255,0.67);
+    color: #667085;
     font-size: 11px;
     font-weight: 600;
   }
 
 
-  /* =========================================
-     EVENT MODAL
-  ========================================== */
+  /* MODAL */
 
   .event-modal-overlay {
     position: fixed;
     inset: 0;
     z-index: 200;
-    background: rgba(20, 0, 35, 0.64);
+    background: rgba(45,15,65,0.38);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     display: flex;
@@ -808,9 +749,9 @@
     z-index: 2;
     width: 40px;
     height: 40px;
-    border: 1px solid rgba(255,255,255,0.30);
+    border: 1px solid rgba(255,255,255,0.75);
     border-radius: 50%;
-    background: rgba(20,0,35,0.55);
+    background: rgba(40,20,55,0.55);
     color: white;
     font-size: 24px;
     line-height: 1;
@@ -818,13 +759,13 @@
   }
 
   .event-modal-close:hover {
-    background: rgba(255,255,255,0.20);
+    background: rgba(40,20,55,0.72);
   }
 
   .event-modal-image-wrap {
     width: 100%;
     min-height: 160px;
-    background: rgba(10,0,20,0.30);
+    background: #f2f3f7;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -839,7 +780,7 @@
 
   .event-modal-no-image {
     padding: 70px 20px;
-    color: rgba(255,255,255,0.72);
+    color: #667085;
     text-align: center;
     font-size: 14px;
   }
@@ -862,16 +803,16 @@
   }
 
   .event-modal-info div {
-    color: rgba(255,255,255,0.72);
+    color: #667085;
     font-size: 14px;
   }
 
   .event-modal-info strong {
-    color: white;
+    color: #344054;
   }
 
   .event-modal-description {
-    color: rgba(255,255,255,0.74);
+    color: #667085;
     line-height: 1.7;
     white-space: pre-line;
     margin-bottom: 19px;
@@ -889,36 +830,27 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background:
-      linear-gradient(
-        135deg,
-        #ff4b00,
-        #ff006e 55%,
-        #8300b3
-      );
+    background: linear-gradient(135deg,#ff4b00,#ff006e 55%,#8300b3);
     color: white;
     text-decoration: none;
     padding: 11px 18px;
     border-radius: 10px;
     font-size: 13px;
     font-weight: 800;
-    border: 1px solid rgba(255,255,255,0.24);
-    box-shadow:
-      0 8px 20px rgba(255,0,110,0.22);
+    border: 1px solid rgba(255,255,255,0.75);
+    box-shadow: 0 8px 20px rgba(255,0,110,0.18);
   }
 
   .event-modal-qr-note {
     padding: 10px 13px;
     border-radius: 10px;
-    color: white;
+    color: #475467;
     font-size: 13px;
     font-weight: 600;
   }
 
 
-  /* =========================================
-     RESPONSIVE
-  ========================================== */
+  /* RESPONSIVE */
 
   @media (min-width: 1450px) {
     .events-grid {
@@ -1156,6 +1088,7 @@
     }
   }
 </style>
+
 
 
 
