@@ -303,17 +303,142 @@
 
 
     .event-card {
-
       background: white;
-
       border-radius: 12px;
-
       overflow: hidden;
-
       border: 1px solid #e5e7eb;
-
       position: relative;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
 
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    }
+
+
+    /* EVENT DETAILS MODAL */
+
+    .event-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .event-modal {
+      width: min(900px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .event-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.65);
+      color: white;
+      font-size: 25px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .event-modal-close:hover {
+      background: rgba(0,0,0,0.8);
+    }
+
+    .event-modal-image-wrap {
+      width: 100%;
+      background: #111827;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .event-modal-image {
+      display: block;
+      width: 100%;
+      max-height: 65vh;
+      object-fit: contain;
+    }
+
+    .event-modal-no-image {
+      padding: 70px 20px;
+      color: white;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .event-modal-content {
+      padding: 22px;
+    }
+
+    .event-modal-title {
+      font-size: 24px;
+      margin-bottom: 14px;
+      color: #111827;
+    }
+
+    .event-modal-info {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    .event-modal-info div {
+      color: #4b5563;
+      font-size: 14px;
+    }
+
+    .event-modal-description {
+      color: #4b5563;
+      line-height: 1.6;
+      white-space: pre-line;
+      margin-bottom: 18px;
+    }
+
+    .event-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .event-modal-register {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 11px 17px;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .event-modal-register:hover {
+      background: #1d4ed8;
+    }
+
+    .event-modal-qr-note {
+      padding: 10px 13px;
+      border-radius: 7px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 13px;
     }
 
 
@@ -662,6 +787,45 @@
        RESPONSIVE
     ========================================== */
 
+    @media (max-width: 600px) {
+
+      .event-modal-overlay {
+        padding: 10px;
+      }
+
+      .event-modal {
+        max-height: calc(100vh - 20px);
+        border-radius: 10px;
+      }
+
+      .event-modal-image {
+        max-height: 55vh;
+      }
+
+      .event-modal-content {
+        padding: 17px;
+      }
+
+      .event-modal-title {
+        font-size: 20px;
+      }
+
+      .event-modal-info div {
+        font-size: 13px;
+      }
+
+      .event-modal-actions {
+        width: 100%;
+      }
+
+      .event-modal-register {
+        text-align: center;
+        width: 100%;
+      }
+
+    }
+
+
     @media (max-width: 1050px) {
 
       .dashboard-layout {
@@ -985,6 +1149,63 @@
 
 
   <!-- =========================================
+       EVENT DETAILS MODAL
+  ========================================== -->
+
+  <div
+    id="eventModalOverlay"
+    class="event-modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Event details"
+  >
+
+    <div class="event-modal">
+
+      <button
+        id="eventModalClose"
+        class="event-modal-close"
+        type="button"
+        aria-label="Close event details"
+      >
+        ×
+      </button>
+
+      <div
+        id="eventModalImageWrap"
+        class="event-modal-image-wrap"
+      ></div>
+
+      <div class="event-modal-content">
+
+        <h2
+          id="eventModalTitle"
+          class="event-modal-title"
+        ></h2>
+
+        <div
+          id="eventModalInfo"
+          class="event-modal-info"
+        ></div>
+
+        <div
+          id="eventModalDescription"
+          class="event-modal-description"
+        ></div>
+
+        <div
+          id="eventModalActions"
+          class="event-modal-actions"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
        JAVASCRIPT
   ========================================== -->
 
@@ -1080,6 +1301,48 @@
     const selectedDateEvents =
       document.getElementById(
         "selectedDateEvents"
+      );
+
+
+    const eventModalOverlay =
+      document.getElementById(
+        "eventModalOverlay"
+      );
+
+
+    const eventModalClose =
+      document.getElementById(
+        "eventModalClose"
+      );
+
+
+    const eventModalImageWrap =
+      document.getElementById(
+        "eventModalImageWrap"
+      );
+
+
+    const eventModalTitle =
+      document.getElementById(
+        "eventModalTitle"
+      );
+
+
+    const eventModalInfo =
+      document.getElementById(
+        "eventModalInfo"
+      );
+
+
+    const eventModalDescription =
+      document.getElementById(
+        "eventModalDescription"
+      );
+
+
+    const eventModalActions =
+      document.getElementById(
+        "eventModalActions"
       );
 
 
@@ -1515,6 +1778,27 @@
             </div>
 
           `;
+
+
+          card.addEventListener(
+            "click",
+            function() {
+              openEventModal(event);
+            }
+          );
+
+
+          const registerLink =
+            card.querySelector(".register-btn");
+
+          if (registerLink) {
+            registerLink.addEventListener(
+              "click",
+              function(e) {
+                e.stopPropagation();
+              }
+            );
+          }
 
 
           eventsContainer.appendChild(
@@ -1972,6 +2256,27 @@
           `;
 
 
+          card.addEventListener(
+            "click",
+            function() {
+              openEventModal(event);
+            }
+          );
+
+
+          const registerLink =
+            card.querySelector(".register-btn");
+
+          if (registerLink) {
+            registerLink.addEventListener(
+              "click",
+              function(e) {
+                e.stopPropagation();
+              }
+            );
+          }
+
+
           grid.appendChild(
             card
           );
@@ -1986,6 +2291,136 @@
 
     }
 
+
+
+    /* =========================================
+       EVENT DETAILS MODAL
+    ========================================== */
+
+    function openEventModal(event) {
+
+      eventModalTitle.textContent =
+        event.title || "Event";
+
+
+      eventModalImageWrap.innerHTML =
+        event.image_url
+          ? `
+            <img
+              class="event-modal-image"
+              src="${escapeAttribute(event.image_url)}"
+              alt="${escapeAttribute(event.title || "Event poster")}"
+            >
+          `
+          : `
+            <div class="event-modal-no-image">
+              No poster available for this event.
+            </div>
+          `;
+
+
+      const infoParts = [];
+
+      if (event.event_date) {
+        infoParts.push(
+          `<div><strong>Date:</strong> ${escapeHTML(formatDate(event.event_date))}</div>`
+        );
+      }
+
+      if (event.event_time) {
+        infoParts.push(
+          `<div><strong>Time:</strong> ${escapeHTML(formatTime(event.event_time))}</div>`
+        );
+      }
+
+      if (event.location) {
+        infoParts.push(
+          `<div><strong>Location:</strong> ${escapeHTML(event.location)}</div>`
+        );
+      }
+
+      eventModalInfo.innerHTML =
+        infoParts.join("");
+
+
+      eventModalDescription.textContent =
+        event.description || "";
+
+      eventModalDescription.classList.toggle(
+        "hidden",
+        !event.description
+      );
+
+
+      if (event.registration_link) {
+        eventModalActions.innerHTML = `
+          <a
+            class="event-modal-register"
+            href="${escapeAttribute(event.registration_link)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Register
+          </a>
+        `;
+      } else if (event.image_url) {
+        eventModalActions.innerHTML = `
+          <div class="event-modal-qr-note">
+            Scan the QR code in the poster to register.
+          </div>
+        `;
+      } else {
+        eventModalActions.innerHTML = "";
+      }
+
+
+      eventModalOverlay.classList.remove(
+        "hidden"
+      );
+
+      document.body.style.overflow =
+        "hidden";
+    }
+
+
+    function closeEventModal() {
+
+      eventModalOverlay.classList.add(
+        "hidden"
+      );
+
+      document.body.style.overflow =
+        "";
+    }
+
+
+    eventModalClose.addEventListener(
+      "click",
+      closeEventModal
+    );
+
+
+    eventModalOverlay.addEventListener(
+      "click",
+      function(e) {
+        if (e.target === eventModalOverlay) {
+          closeEventModal();
+        }
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      function(e) {
+        if (
+          e.key === "Escape" &&
+          !eventModalOverlay.classList.contains("hidden")
+        ) {
+          closeEventModal();
+        }
+      }
+    );
 
 
     /* =========================================
